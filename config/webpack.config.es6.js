@@ -1,4 +1,5 @@
 const webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const _ = require('lodash');
 const argv = require('yargs').default({ env: DEVELOPMENT }).argv;
 const DEVELOPMENT = 'development';
@@ -52,12 +53,48 @@ function getEntry(env) {
 }
 
 function getCommonLoaders() {
+  let outputPath = 'name=assets/[name].[ext]'
+
   let htmlLoader = {
     test: /\.html?$/,
     exclude: /node_modules/,
     loaders: ['file?name=[path][name].[ext]']
+  };
+  let cssLoader = {
+    test: /\.css$/,
+    loader: ExtractTextPlugin.extract("style-loader", "css-loader")
   }
-  return [htmlLoader];
+
+  let pngLoader = {
+    test: /\.png$/,
+    loader: `url-loader?limit=100000&${outputPath}`
+  }
+  let jpgLoad =
+    {
+      test: /\.jpg$/,
+      loader: `file-loader?${outputPath}`
+    }
+  let woffLoader =
+    {
+      test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
+      loader: `url?limit=10000&mimetype=application/font-woff&${outputPath}`
+    }
+  let ttfLoader =
+    {
+      test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
+      loader: `url?limit=10000&mimetype=application/octet-stream&${outputPath}`
+    }
+  let eotLoader =
+    {
+      test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+      loader: `file?${outputPath}`
+    }
+  let svgLoader =
+    {
+      test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+      loader: `url?limit=10000&mimetype=image/svg+xml&${outputPath}`
+    }
+  return [htmlLoader, cssLoader, pngLoader, jpgLoad, woffLoader, ttfLoader, eotLoader, svgLoader];
 }
 
 function getJsxLoader(env) {
@@ -78,7 +115,8 @@ function getCommonPlugins() {
       minChunks: function (module, count) {
         return module.resource && module.resource.indexOf(PROJECT_CONFIG.PATH.SRC) === -1;
       }
-    })
+    }),
+    new ExtractTextPlugin('assets/[name].css')
   ];
 }
 
