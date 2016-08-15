@@ -9,6 +9,8 @@ const compiler = webpack(webpackConfig);
 const app = express();
 const PROJECT_CONFIG = require('./config/PROJECT_CONFIG');
 
+
+
 app.use(express.static(PROJECT_CONFIG.PATH.DIST));
 
 app.use(webpackDevMiddleware(compiler, {
@@ -26,17 +28,14 @@ app.use(webpackHotMiddleware(compiler, {
   heartbeat: 10 * 1000,
 }));
 
-
-
-
+app.use('/api/helloworld',require('./mockapi/helloworld'));
 
 const port = 4000;
+let url = `http://localhost:${port}`;
 app.listen(port, () => {
-  let url = `http://localhost:${port}`;
   console.log(`Example app listening ${url}`);
-  open(url);
 });
-
+open(url);
 
 
 

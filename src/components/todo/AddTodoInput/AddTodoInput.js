@@ -4,17 +4,22 @@ import {addTodo} from '../../../actions';
 class AddTodoInput extends Component {
   constructor(props) {
     super(props);
-   
     this.state = { inputValue: '' };
-    this.inputChange = this.inputChange.bind(this);
     this.addNewTodo = this.addNewTodo.bind(this);
+  }
+
+  addNewTodo(event) {
+    event.preventDefault();
+    const todoText = this.foo.value
+    console.log('this.foo :', this.foo.value);
+    this.props.dispatch(addTodo(todoText));
   }
 
   render() {
     return (
       <div>
         <form onSubmit={this.addNewTodo} >
-          <input type="text" onChange={this.inputChange}/>
+          <input ref={node => { this.foo = node; } }/>
           <button className="btn">
             <i className="fa fa-plus" aria-hidden="true"></i>
           </button>
@@ -23,13 +28,7 @@ class AddTodoInput extends Component {
     );
   }
 
-  inputChange(e) {
-    this.setState({ inputValue: e.target.value });
-  }
-  addNewTodo(event) {
-    event.preventDefault();
-    this.props.dispatch(addTodo(this.state.inputValue));
-  }
+
 }
 AddTodoInput = connect()(AddTodoInput);
 export default AddTodoInput;
