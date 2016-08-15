@@ -21,6 +21,8 @@ const todos = (state = List(), action) => {
 
           // TODO not workded in immutable API
           // todo.update('completed',(val=false)=>!val);
+
+          // TODO not workded too.
           // todo.update('completed',false,val=>!val);
         };
 
