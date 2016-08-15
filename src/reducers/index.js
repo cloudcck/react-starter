@@ -1,7 +1,7 @@
 import { List, fromJS } from 'immutable';
 import uuid from 'uuid';
 import { combineReducers } from 'redux-immutable';
-import { SET_VISIBILITY_FILTER, VisibilityFilters, ADD_TODO, TOGGLE_TODO } from '../actions';
+import { SET_VISIBILITY_FILTER, VisibilityFilters, ADD_TODO, TOGGLE_TODO, INIT_TODOS, RECEIVE_TODOS_FROM_API} from '../actions';
 
 const todos = (state = List(), action) => {
   switch (action.type) {
@@ -25,9 +25,13 @@ const todos = (state = List(), action) => {
           // TODO not workded too.
           // todo.update('completed',false,val=>!val);
         };
-
         return todo;
-      })
+      });
+    case INIT_TODOS:
+      return fromJS(action.todos);
+    case RECEIVE_TODOS_FROM_API:
+    console.log('action.receiveTime ',action.receiveTime);
+      return fromJS(action.todos);
     default:
       return state;
   }

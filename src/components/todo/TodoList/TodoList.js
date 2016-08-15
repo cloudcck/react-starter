@@ -1,13 +1,17 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import Todo from '../Todo';
-import {toggleTodo} from '../../../actions';
+import {toggleTodo, fetchTodosFromApi} from '../../../actions';
 class TodoList extends Component {
   constructor(props) {
     super(props);
     console.log('TodoList props', JSON.stringify(props, null, 2));
+    // this.props.fetchTodosFromApi();
   }
-
+  componentDidMount() {
+    this.props.fetchTodosFromApi();
+  }
+  
   render() {
     return (
       <ul>
@@ -24,6 +28,7 @@ class TodoList extends Component {
     );
   }
 }
+
 TodoList = connect(
   (state, ownProps = {}) => {
     return {
@@ -34,6 +39,9 @@ TodoList = connect(
     return {
       onTodoClick: (id) => {
         dispatch(toggleTodo(id))
+      },
+      fetchTodosFromApi: () => {
+        dispatch(fetchTodosFromApi())
       }
     }
   }

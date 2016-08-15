@@ -1,0 +1,7 @@
+.app-banner{
+  display: block;
+  background-color: #ccc;
+}
+.app-userinfo{
+  float:right;
+}

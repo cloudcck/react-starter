@@ -1,12 +1,14 @@
-require('./index.html');
+import 'babel-polyfill';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'font-awesome/css/font-awesome.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import store from './store';
+
+import './index.html';
 import App from './App';
-import './App.css';
+
 
 ReactDOM.render(
   <Provider store={store}>

@@ -28,14 +28,17 @@ app.use(webpackHotMiddleware(compiler, {
   heartbeat: 10 * 1000,
 }));
 
-app.use('/api/helloworld',require('./mockapi/helloworld'));
+app.use('/api/helloworld', require('./mockapi/helloworld'));
+app.use('/api/todos', require('./mockapi/todos'));
 
 const port = 4000;
-let url = `http://localhost:${port}`;
+
 app.listen(port, () => {
+  let url = `http://localhost:${port}`;
   console.log(`Example app listening ${url}`);
+  open(url);
 });
-open(url);
+
 
 
 

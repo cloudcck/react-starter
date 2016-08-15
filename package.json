@@ -4,7 +4,7 @@
   "description": "Start project for React and Redux ",
   "main": "index.js",
   "scripts": {
-    "start": "rimraf dist && nodemon server.js --env=development",
+    "start": "rimraf dist && node server.js --env=development",
     "build": "rimraf dist && webpack --progress --colors --env=production",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -19,6 +19,7 @@
     "css-loader": "^0.23.1",
     "express": "^4.14.0",
     "extract-text-webpack-plugin": "^1.0.1",
+    "faker": "^3.1.0",
     "file-loader": "^0.9.0",
     "nodemon": "^1.10.0",
     "open": "0.0.5",
@@ -33,15 +34,19 @@
     "yargs": "^4.8.1"
   },
   "dependencies": {
+    "babel-polyfill": "^6.13.0",
     "bootstrap": "^3.3.7",
     "font-awesome": "^4.6.3",
     "immutable": "^3.8.1",
+    "isomorphic-fetch": "^2.2.1",
+    "moment": "^2.14.1",
     "react": "^15.3.0",
     "react-dom": "^15.3.0",
     "react-redux": "^4.4.5",
     "redux": "^3.5.2",
     "redux-immutable": "^3.0.7",
     "redux-logger": "^2.6.1",
+    "redux-thunk": "^2.1.0",
     "uuid": "^2.0.2"
   }
 }
