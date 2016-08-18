@@ -1,11 +1,6 @@
 import React, {Component} from 'react';
 import {Banner, Navbar, Footer} from './common';
-
-import DashboardPage from '../pages/dashboard/containers/DashboardPage';
-import AdministrationPage from '../pages/administration/containers/AdministrationPage';
-import AboutPage from '../pages/about/containers/AboutPage';
-import TodoPage from '../pages/todo/containers/TodoPage';
-
+import { DashboardPage, AdministrationPage, AboutPage, TodoPage } from '../pages';
 
 class App extends Component {
   render() {
