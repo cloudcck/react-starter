@@ -45,7 +45,7 @@ function getEntry(env) {
         bundle: [
           'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000',
           PROJECT_CONFIG.PATH.SRC + '/index.js']
-      }
+      };
     case PRODUCTION:
     default:
       return { bundle: PROJECT_CONFIG.PATH.SRC + '/index.js' };
@@ -53,7 +53,7 @@ function getEntry(env) {
 }
 
 function getCommonLoaders() {
-  let outputPath = 'name=assets/[name].[ext]'
+  let outputPath = 'name=assets/[name].[ext]';
 
   let htmlLoader = {
     test: /\.html?$/,
@@ -63,37 +63,37 @@ function getCommonLoaders() {
   let cssLoader = {
     test: /\.css$/,
     loader: ExtractTextPlugin.extract("style-loader", "css-loader")
-  }
+  };
 
   let pngLoader = {
     test: /\.png$/,
     loader: `url-loader?limit=100000&${outputPath}`
-  }
+  };
   let jpgLoad =
     {
       test: /\.jpg$/,
       loader: `file-loader?${outputPath}`
-    }
+    };
   let woffLoader =
     {
       test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
       loader: `url?limit=10000&mimetype=application/font-woff&${outputPath}`
-    }
+    };
   let ttfLoader =
     {
       test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
       loader: `url?limit=10000&mimetype=application/octet-stream&${outputPath}`
-    }
+    };
   let eotLoader =
     {
       test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
       loader: `file?${outputPath}`
-    }
+    };
   let svgLoader =
     {
       test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
       loader: `url?limit=10000&mimetype=image/svg+xml&${outputPath}`
-    }
+    };
   return [htmlLoader, cssLoader, pngLoader, jpgLoad, woffLoader, ttfLoader, eotLoader, svgLoader];
 }
 
@@ -102,7 +102,7 @@ function getJsxLoader(env) {
     test: /\.jsx?$/,
     exclude: /node_modules/,
     loaders: env === DEVELOPMENT ? ['react-hot', 'babel'] : ['babel']
-  }
+  };
   return [jsxLoader];
 }
 
@@ -129,7 +129,10 @@ function getEnvPlugins(env) {
       ];
     case PRODUCTION:
       return [
-        new webpack.optimize.UglifyJsPlugin()
+        new webpack.optimize.UglifyJsPlugin(),
+        new webpack.DefinePlugin({
+          'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production')
+        })
       ];
     default:
       return [];

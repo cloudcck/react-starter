@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import Todo from '../Todo';
-import {toggleTodo, fetchTodosFromApi} from '../../../actions';
+import {toggleTodo, fetchTodosFromApi} from '../../actions';
 class TodoList extends Component {
   constructor(props) {
     super(props);
@@ -11,7 +11,7 @@ class TodoList extends Component {
   componentDidMount() {
     this.props.fetchTodosFromApi();
   }
-  
+
   render() {
     return (
       <ul>
@@ -33,17 +33,17 @@ TodoList = connect(
   (state, ownProps = {}) => {
     return {
       todos: state.get('todos').toJS()
-    }
+    };
   },
   (dispatch) => {
     return {
       onTodoClick: (id) => {
-        dispatch(toggleTodo(id))
+        dispatch(toggleTodo(id));
       },
       fetchTodosFromApi: () => {
-        dispatch(fetchTodosFromApi())
+        dispatch(fetchTodosFromApi());
       }
-    }
+    };
   }
 )(TodoList);
 export default TodoList;

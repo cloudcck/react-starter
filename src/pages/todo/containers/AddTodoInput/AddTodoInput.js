@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
-import {addTodo} from '../../../actions';
+import {addTodo} from '../../actions';
 class AddTodoInput extends Component {
   constructor(props) {
     super(props);
@@ -10,7 +10,7 @@ class AddTodoInput extends Component {
 
   addNewTodo(event) {
     event.preventDefault();
-    const todoText = this.foo.value
+    const todoText = this.foo.value;
     console.log('this.foo :', this.foo.value);
     this.props.dispatch(addTodo(todoText));
   }

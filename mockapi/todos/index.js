@@ -13,8 +13,8 @@ module.exports = (() => {
         completed: false
       });
     }
-    res.send({ Code: 0, Message: 'OK', Data: todos })
-  })
+    res.send({ Code: 0, Message: 'OK', Data: todos });
+  });
 
   return router;
 })();
