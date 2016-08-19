@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
-
+import { Accounts, ProxySetting, WebConsoleSetting } from '../index.js';
 class AdministrationPage extends Component {
   render() {
     return (
       <div>
-        This is AdministrationPage
+      AdministrationPage
+        <hr/>     
+         {this.props.children}
       </div>
     );
   }

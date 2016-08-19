@@ -5,6 +5,8 @@ class AboutPage extends Component {
     return (
       <div>
         This is AboutPage
+        <hr/>
+        <pre>{JSON.stringify(this.props.params, null, 2) }</pre>
       </div>
     );
   }

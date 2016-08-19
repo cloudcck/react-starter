@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+
 import {Banner, Navbar, Footer} from './common';
 import { DashboardPage, AdministrationPage, AboutPage, TodoPage } from '../pages';
 
@@ -8,12 +9,7 @@ class App extends Component {
       <div>
         <Banner />
         <Navbar />
-        <div className="app-container">
-          <TodoPage />
-          <AboutPage />
-          <AdministrationPage />
-          <DashboardPage />
-        </div>
+         {this.props.children}
         <Footer />
       </div>
     );
@@ -21,3 +17,12 @@ class App extends Component {
 }
 
 export default App;
+
+/*
+<div className="app-container">
+          <TodoPage />
+          <AboutPage />
+          <AdministrationPage />
+          <DashboardPage />
+        </div>
+*/
