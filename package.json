@@ -4,7 +4,7 @@
   "description": "Start project for React and Redux ",
   "main": "index.js",
   "scripts": {
-    "start": "rimraf dist && node server.js --env=development",
+    "start": "rimraf dist && node server.js --env=development --progress",
     "build": "cross-env NODE_ENV=production && rimraf dist && webpack --progress --colors",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -22,6 +22,7 @@
     "extract-text-webpack-plugin": "^1.0.1",
     "faker": "^3.1.0",
     "file-loader": "^0.9.0",
+    "http-proxy-middleware": "^0.17.1",
     "nodemon": "^1.10.0",
     "open": "0.0.5",
     "react-hot-loader": "^1.3.0",

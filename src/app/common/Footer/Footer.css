@@ -1,7 +1,7 @@
 .app-footer{
   display: table;
   background-color:#ccc;
-  position: absolute;
+  position: fixed;
   bottom: 0;
   min-height: 2em;
   width: 100%;

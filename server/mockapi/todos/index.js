@@ -5,7 +5,7 @@ module.exports = (() => {
   let router = express.Router();
   router.get('/', (req, res) => {
     let todos = [];
-    for (let x = 0; x < 5; x++) {
+    for (let x = 0; x < 50  ; x++) {
       let text = `${faker.hacker.verb()} ${faker.hacker.noun()} `;
       todos.push({
         id: uuid.v4(),

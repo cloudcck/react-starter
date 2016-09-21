@@ -5,6 +5,10 @@ let project_config = {
     SRC: path.join(__dirname, '../', 'src'),
     DIST: path.join(__dirname, '../', 'dist'),
     NODE_MODULES: path.join(__dirname, '../', 'node_modules')
+  },
+  PORT:{
+    CLIENT:4000,
+    MOCKAPI:8000
   }
 
 };
