@@ -31,7 +31,7 @@ class TodoList extends Component {
 
 const mapStateToProps = (state, ownProps = {}) => {
   return {
-    todos: state.get('todos').toJS()
+    todos: state.getIn(['todoState','todos'],[]).toJS()
   };
 };
 

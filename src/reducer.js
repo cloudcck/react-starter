@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux-immutable';
-import  {todos,visibilityFilter} from './pages/todo/reducers';
+import  todoState from './pages/todo/reducers';
 
-const todoApp = combineReducers({
-  visibilityFilter,
-  todos
+
+const appStrore = combineReducers({
+  todoState
 });
 
-export default todoApp;
+export default appStrore;

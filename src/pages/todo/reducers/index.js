@@ -45,5 +45,8 @@ const visibilityFilter = (state = VisibilityFilters.SHOW_ALL, action) => {
       return state;
   }
 }
+const todoState = combineReducers({
+  todos,visibilityFilter
+})
 
-export {todos,visibilityFilter};
+export default todoState;
