@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
-import Todo from '../Todo';
+import Todo from '../../components/Todo';
 import {toggleTodo, fetchTodosFromApi} from '../../actions';
 class TodoList extends Component {
   constructor(props) {
