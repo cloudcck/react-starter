@@ -29,21 +29,22 @@ class TodoList extends Component {
   }
 }
 
-TodoList = connect(
-  (state, ownProps = {}) => {
-    return {
-      todos: state.get('todos').toJS()
-    };
-  },
-  (dispatch) => {
-    return {
-      onTodoClick: (id) => {
-        dispatch(toggleTodo(id));
-      },
-      fetchTodosFromApi: () => {
-        dispatch(fetchTodosFromApi());
-      }
-    };
-  }
-)(TodoList);
+const mapStateToProps = (state, ownProps = {}) => {
+  return {
+    todos: state.get('todos').toJS()
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onTodoClick: (id) => {
+      dispatch(toggleTodo(id));
+    },
+    fetchTodosFromApi: () => {
+      dispatch(fetchTodosFromApi());
+    }
+  };
+}
+
+TodoList = connect(mapStateToProps,mapDispatchToProps)(TodoList);
 export default TodoList;

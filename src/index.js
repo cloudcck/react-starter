@@ -5,9 +5,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { Route, Router, hashHistory, IndexRoute,browserHistory} from 'react-router';
-import { DashboardPage, AdministrationPage, AboutPage, TodoPage } from './pages';
+import { DashboardPage, AdministrationPage, AboutPage, TodoPage, FootprintPage } from './pages';
 import { Accounts, ProxySetting, WebConsoleSetting } from './pages/administration/containers';
-import store from './pages/todo/store';
+import store from './store';
 
 import './index.html';
 import App from './app/App';
@@ -27,6 +27,7 @@ ReactDOM.render(
           <Route path="proxy" component={ProxySetting} />
           <Route path="console" component={WebConsoleSetting} />
         </Route>
+        <Route path="footprint" component={FootprintPage}/>
       </Route>
     </Router>
   </Provider>,
