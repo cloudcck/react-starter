@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-
 import {Banner, Navbar, Footer} from './common';
-import { DashboardPage, AdministrationPage, AboutPage, TodoPage } from '../pages';
+import { DashboardPage, AdministrationPage, AboutPage, TodoPage } from './pages';
+import './App.css';
 
 class App extends Component {
   render() {

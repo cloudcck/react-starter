@@ -10,7 +10,7 @@ import { Accounts, ProxySetting, WebConsoleSetting } from './pages/administratio
 import store from './store';
 
 import './index.html';
-import App from './app/App';
+import App from './App';
 
 
 ReactDOM.render(
