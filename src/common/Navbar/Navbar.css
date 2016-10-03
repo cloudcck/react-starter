@@ -5,3 +5,11 @@
 .active-link{
   color:green
 }
+.app-navbar ul{
+  list-style: none;
+}
+.app-navbar ul li{
+  display: inline;
+  list-style-type: none;
+  padding-right: 20px;
+}

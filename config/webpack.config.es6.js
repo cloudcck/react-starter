@@ -17,7 +17,7 @@ const webpackConfig = {
     filename: '[name].js'
   },
   module: {
-    loaders: _.concat(getCommonLoaders(), getJsxLoader(env))
+    loaders: [].concat(getCommonLoaders(), getJsxLoader(env))
   },
   resolveLoader: {
     root: [PROJECT_CONFIG.PATH.NODE_MODULES]
@@ -25,7 +25,7 @@ const webpackConfig = {
   resolve: {
     root: [PROJECT_CONFIG.PATH.NODE_MODULES]
   },
-  plugins: _.concat(getCommonPlugins(), getEnvPlugins(env))
+  plugins: [].concat(getCommonPlugins(), getEnvPlugins(env))
 };
 
 function getDevTool(env) {

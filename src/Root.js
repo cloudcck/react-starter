@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import {Banner, Navbar, Footer} from './common';
 import { DashboardPage, AdministrationPage, AboutPage, TodoPage } from './pages';
-import './App.css';
+import './Root.css';
 
-class App extends Component {
+class Root extends Component {
   render() {
     return (
       <div>
@@ -16,7 +16,7 @@ class App extends Component {
   }
 }
 
-export default App;
+export default Root;
 
 /*
 <div className="app-container">

@@ -10,13 +10,13 @@ import { Accounts, ProxySetting, WebConsoleSetting } from './pages/administratio
 import store from './store';
 
 import './index.html';
-import App from './App';
+import Root from './Root';
 
 
 ReactDOM.render(
   <Provider store={store}>
     <Router history={hashHistory}>
-      <Route path="/" component={App} >
+      <Route path="/" component={Root} >
         <IndexRoute component={DashboardPage}/>
         <Route path="todos" component={TodoPage}/>
         <Route path="about" component={AboutPage}/>

@@ -5,7 +5,7 @@ import {toggleTodo, fetchTodosFromApi} from '../../actions';
 class TodoList extends Component {
   constructor(props) {
     super(props);
-    console.log('TodoList props', JSON.stringify(props, null, 2));
+    // console.log('TodoList props', JSON.stringify(props, null, 2));
     // this.props.fetchTodosFromApi();
   }
   componentDidMount() {
