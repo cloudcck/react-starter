@@ -59,7 +59,7 @@ class SvgContent extends Component {
     _.values(this.props.processChain).forEach(obj => this.addNodeToGraph(this.state.graph, obj, true));
     dagre.layout(this.state.graph);
     const svgWidth = `${window.innerWidth}px`;
-    const svgHeight = `${window.innerHeight > 600 ? 600 :window.innerHeight }px`;
+    const svgHeight = `${window.innerHeight > 600 ? 600 : window.innerHeight}px`;
     const svgStyle = { width: svgWidth, height: svgHeight };
     let edgeId = 1;
     return (
@@ -75,12 +75,11 @@ class SvgContent extends Component {
           </defs>
           <g id="vertexes">
             {
-              this.state.graph.nodes().map(n => <Vertex key={n} data={this.state.graph.node(n) } />)
-            }
-            {
               this.state.graph.edges().map(e => <Edge key={edgeId++} data={e} points={this.state.graph.edge(e).points} />)
             }
-
+            {
+              this.state.graph.nodes().map(n => <Vertex key={n} data={this.state.graph.node(n) } />)
+            }
           </g>
         </svg>
       </div>

@@ -1,31 +1,42 @@
 import React, {Component} from 'react';
-import { Map, fromJS } from 'immutable';
+import { Map, fromJS, toJS } from 'immutable';
 import { connect } from 'react-redux';
-import {fetchFootprintsFromServer} from '../actions';
+import {fetchFootprintsFromServer, toggleView, CHART_VIEW, TABLE_VIEW} from '../actions';
 import ChartView from '../components/ChartView';
 import TableView from '../components/TableView';
 import _ from 'lodash';
 class FootprintPage extends Component {
+  constructor(props) {
+    super(props);
+    this.handleToggleView = this.handleToggleView.bind(this);
+  }
   componentDidMount() {
     this.props.fetchFootprintsFromServer('foo', 'bar');
+
+  }
+  handleToggleView(view) {
+    this.props.toggleView(view);
   }
   render() {
-    console.log('query -> ', this.props.location.query);
-    const view = _.get(this.props, 'location.query.view', 'chart');
-    let View = view === 'chart' ? ChartView : TableView;
+    const footprints = this.props.footprints;
+    const displayView = this.props.displayView;
+    const View = displayView === TABLE_VIEW ? TableView : ChartView;
     return (
       <div>
-        This is footprint page <hr />
-        <hr />
-        <View serverMeta={this.props.footprintState.footprints.serverMeta} processChain={this.props.footprintState.footprints.processChain}/>
+        <button onClick={() => this.handleToggleView(TABLE_VIEW) }>TABLE_VIEW</button>
+        <button onClick={() => this.handleToggleView(CHART_VIEW) }>CHART_VIEW</button>
+        <View serverMeta={footprints.serverMeta} processChain={footprints.processChain}/>
       </div>
     );
   }
 }
 
+
 const mapStateToProps = (state, ownProps = {}) => {
+  console.log('state.toJS()', state.toJS());
   return {
-    footprintState: state.getIn(['footprintState'], new Map()).toJS(),
+    footprints: state.getIn(['footprintState', 'footprints'], new Map()).toJS(),
+    displayView: state.getIn(['footprintState', 'displayView'], 'xxxxx')
   };
 };
 
@@ -33,6 +44,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     fetchFootprintsFromServer: (tasiId, agentId) => {
       dispatch(fetchFootprintsFromServer(tasiId, agentId));
+    },
+    toggleView: (view) => {
+      dispatch(toggleView(view));
     }
   };
 }
