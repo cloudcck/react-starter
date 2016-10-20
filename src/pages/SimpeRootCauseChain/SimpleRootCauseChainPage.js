@@ -2,25 +2,48 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import dagre from 'dagre';
 import _ from 'lodash'
+import JSONTree from 'react-json-tree'
 
 import { fetchRemoteData } from './redux/action';
 import moment from 'moment';
 import Edge from './components/Edge';
 import Vertex from './components/Vertex';
 class SimpleRootCauseChain extends Component {
-
+  constructor(props) {
+    super(props);
+    this.debugXXX = this.debugXXX.bind(this);
+  }
   componentWillMount() {
     this.props.fetchRemoteData('xxx', 'ooo');
-    let graph = createGraph();
-    let data = createData();
-    updateLayout(graph, data);
-    this.state = transfer(graph);
   }
+
+  debugXXX(chains) {
+    if (_.size(chains)) {
+      let {timeSlots, vertexes} = chains;
+      // let xx = {};
+      let bbb = timeSlots
+        .map((timeSlotKey) => { return { [timeSlotKey]: [] } })
+        .reduce((pre, curr) => {
+          return _.merge(pre, curr);
+        })
+      _.forEach(vertexes, (value, key) => {
+        bbb[value.timeSlot].push(value.id);
+      });
+    } else {
+      return { foo: 'bar' };
+    }
+  }
+
   render() {
-    const {edges, vertexes} = this.state;
+    let graph = createGraph();
+    updateLayoutFromState(graph, this.props.chains);
+    // let xxx = this.debugXXX(this.props.chains);
+
+    const {edges, vertexes} = transfer(graph);
     return (
       <div>
-        {JSON.stringify(this.props.chains)}<hr />
+        <JSONTree data={this.props.chains} />
+
         {
           <svg width="100%" height="600px">
             <g>
@@ -40,7 +63,6 @@ class SimpleRootCauseChain extends Component {
 
 
 const mapStateToProps = (state, ownProps = {}) => {
-  console.log('state.toJS()', state.toJS());
   return {
     chains: state.getIn(['rcpc', 'chains'], new Map()).toJS(),
   };
@@ -197,8 +219,68 @@ const updateLayout = (graph, data) => {
   })
 
   dagre.layout(graph);
-
 }
+
+const updateLayoutFromState = (graph, chains) => {
+
+  const SIZE = {
+    MAX: { width: 60, height: 30 },
+    MIN: { width: 40, height: 30 },
+  };
+
+  const COLOR = {
+    DANGER: 'red',
+    NORMAL: 'gray',
+    NONE: 'white',
+    HIGHTLIGHT: 'yellow',
+  };
+  const {vertexes, timeSlots} = chains;
+
+
+  const countMinLength = (src, dest, xxxx) => {
+    console.log('timeSlots', JSON.stringify(timeSlots));
+    console.log(`src:${src} , dest: ${dest} ,dest2: ${xxxx}`);
+    const fromIndex = _.indexOf(timeSlots, src);
+    const toIndex1 = _.indexOf(timeSlots, dest);
+    const toIndex2 = _.indexOf(timeSlots, xxxx);
+    console.log(`fromIndex: ${fromIndex}, toIndex1:${toIndex2}, toIndex1:${toIndex2}`);
+    const length1 = toIndex1 - fromIndex;
+    const length2 = toIndex2 - fromIndex;
+    return length1 > length2 ? length1 : length2;
+  }
+
+
+  _.forEach(vertexes, (d) => {
+    console.log('--------------------------------------', d.id);
+    graph.setNode(d.id, Object.assign({}, d, SIZE.MAX));
+    if (_.size(d.dest)) {
+      _.forEach(d.dest, (obj, id) => {
+        if (!graph.hasNode(id)) {
+          graph.setNode(id, Object.assign({}, { id, label: _.get(vertexes[id], 'label', id) }, SIZE.MAX));
+        }
+
+        //          latestTimeFromSrc: opTime,
+        //         latestTimeSlotFromSrc: timeSlot,
+        //         firstTimeFromDest: opTime,
+        //         firstTimeSlotFromDest: timeSlot
+        console.log(`&&&&&&  ${d.id} , ${id},${vertexes[d.id].latestTimeSlotFromSrc}, ${vertexes[id].latestTimeSlotFromSrc}, ${vertexes[id].firstTimeSlotFromDest}`)
+        let minlen = countMinLength(vertexes[d.id].latestTimeSlotFromSrc, vertexes[id].latestTimeSlotFromSrc, vertexes[id].firstTimeSlotFromDest);
+        minlen = minlen < 1 ? 1 : minlen;
+        // console.log('---------->', d.id, id, obj.oper, minlen);
+        console.log(`${d.id} -> ${id} minlen=${minlen}`)
+        graph.setEdge(d.id, id, { name: obj.oper, time: obj.operTime, minlen });
+      })
+    }
+  })
+
+
+  dagre.layout(graph);
+}
+
+
+
+
+
 const transfer = (graph) => {
   let vertexes = graph.nodes().map(n => { return graph.node(n) });
   let edges = graph.edges().map(e => {
@@ -214,3 +296,5 @@ const transfer = (graph) => {
   });
   return { vertexes, edges };
 }
+
+

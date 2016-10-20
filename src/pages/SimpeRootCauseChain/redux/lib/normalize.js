@@ -4,7 +4,9 @@ import moment from 'moment';
 export const normailze = (processes, fmt = 'YYYY-MM-DD') => {
   return _.sortByAll(processes, ['opTime'], ['asc'])
     .map(e => xxxMap(e, fmt))
-    .reduce((pre, curr) => xxxReduce(pre, curr));
+    .reduce((preveriousValue, currentValue) => xxxReduce(preveriousValue, currentValue));
+
+
 }
 
 const xxxMap = (chain, fmt) => {
@@ -17,34 +19,68 @@ const xxxMap = (chain, fmt) => {
         label: parentId,
         src: {},
         dest: { [childId]: { op, opTime } },
-        latestOperTime: opTime,
-        timeSlot
+        latestTimeFromSrc: opTime,
+        latestTimeSlotFromSrc: timeSlot,
+        firstTimeFromDest: opTime,
+        firstTimeSlotFromDest: timeSlot
+
       },
       [childId]: {
         id: childId,
         label: childId,
         src: { [parentId]: { op, opTime } },
         dest: {},
-        latestOperTime: opTime,
-        timeSlot
+        latestTimeFromSrc: opTime,
+        latestTimeSlotFromSrc: timeSlot,
+        firstTimeFromDest: opTime,
+        firstTimeSlotFromDest: timeSlot
       }
     },
     timeSlots: [timeSlot]
   }
 }
 
-const xxxReduce = (pre, curr) => {
-  let {vertexes} = pre;
-  _.forEach(curr.vertexes, (value, key) => {
-    if (_.has(vertexes, key)) {
-      vertexes[key].src = _.merge(vertexes[key].src, value.src);
-      vertexes[key].dest = _.merge(vertexes[key].dest, value.dest);
-      vertexes[key].latestOperTime = vertexes[key].latestOperTime < value.latestOperTime ? vertexes[key].latestOperTime : value.latestOperTime;
-      vertexes[key].timeSlot = value.timeSlot;
+const xxxReduce = (preveriousValue, currentValue) => {
+  let {vertexes} = preveriousValue;
+  // console.log(_.repeat('-', 100));
+  // console.log(JSON.stringify(vertexes, '', 2));
+  _.forEach(currentValue.vertexes, (value, id) => {
+
+    if (_.has(vertexes, id)) {
+
+      vertexes[id].src = _.merge(vertexes[id].src, value.src);
+      vertexes[id].dest = _.merge(vertexes[id].dest, value.dest);
+
+
+      let t1 = _.keys(vertexes[id].src)
+        .map((key) => [_.get(vertexes, `${key}.latestTimeFromSrc`)])
+        .reduce((pre, curr) => pre > curr ? pre : curr);
+
+      let t2 = t1;
+      if (_.size(vertexes[id].dest)) {
+        t2 = _.keys(vertexes[id].dest)
+          .map((key) => _.get(vertexes, `${key}.firstTimeFromDest`, 0))
+          .reduce((pre, curr) => pre > curr ? pre : curr);
+      }
+
+      let t = t1 > t2 ? t1 : t2;
+      console.log(`${t1}\n${t2}\->${t}`)
+      console.log(`reduce UPDATE new vertex ${id} ------> ${JSON.stringify(vertexes[id])} `);
+      console.log(`update ${id} ->t1:${t} , ${moment.unix(t).format('YYYY-MM-DD')}`);
+
+      vertexes[id].latestTimeFromSrc = t1;
+      vertexes[id].latestTimeSlotFromSrc = moment.unix(t1).format('YYYY-MM-DD');
+
+      vertexes[id].firstTimeFromDest = t2;
+      vertexes[id].firstTimeSlotFromDest = moment.unix(t2).format('YYYY-MM-DD');
+
+      // vertexes[id].latestOperTime = vertexes[id].latestOperTime > value.latestOperTime ? vertexes[id].latestOperTime : value.latestOperTime;
+      // vertexes[id].timeSlot = value.timeSlot;
     } else {
-      vertexes[key] = value;
+      console.log(`reduce ADD new vertex ${id}, ${JSON.stringify(value)} `);
+      vertexes[id] = value;
     }
   })
-  pre.timeSlots = _.union(pre.timeSlots, curr.timeSlots);
-  return pre;
+  preveriousValue.timeSlots = _.union(preveriousValue.timeSlots, currentValue.timeSlots);
+  return preveriousValue;
 }
