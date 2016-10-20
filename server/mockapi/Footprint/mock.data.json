@@ -8,10 +8,10 @@
     },
     "processChain": [
       {
-        "processId": 1,
-        "objectId": 1,
-        "parentId": -1,
+        "parentId": 1,
+        "objectId": 2,
         "isProcess": true,
+        "opTime": "2011-01-01",
         "operation": [
           0
         ],
@@ -28,391 +28,203 @@
         ]
       },
       {
-        "processId": 2,
-        "objectId": 343881,
-        "parentId": -1,
-        "isProcess": true,
-        "operation": [
-          0
-        ],
-        "objectDetail": [
-          {
-            "metaLinkId": 5111438866442386000,
-            "objectType": 2,
-            "operation": 0,
-            "metaHashId": [
-              3980925849097472000
-            ],
-            "timestamp": 0
-          }
-        ]
-      },
-      {
-        "processId": 3,
-        "objectId": 389220,
-        "parentId": -1,
-        "isProcess": true,
-        "operation": [
-          0
-        ],
-        "objectDetail": [
-          {
-            "metaLinkId": 5370121699493987000,
-            "objectType": 2,
-            "operation": 0,
-            "metaHashId": [
-              3980925849097472000
-            ],
-            "timestamp": 0
-          }
-        ]
-      },
-      {
-        "processId": 4,
-        "objectId": 414440,
-        "parentId": -1,
-        "isProcess": true,
-        "operation": [
-          0
-        ],
-        "objectDetail": [
-          {
-            "metaLinkId": 6179991051327352000,
-            "objectType": 2,
-            "operation": 0,
-            "metaHashId": [
-              3980925849097472000
-            ],
-            "timestamp": 0
-          }
-        ]
-      },
-      {
-        "processId": 5,
-        "objectId": 645904,
-        "parentId": -1,
-        "isProcess": true,
-        "operation": [
-          0
-        ],
-        "objectDetail": [
-          {
-            "metaLinkId": 1547899780497994500,
-            "objectType": 2,
-            "operation": 0,
-            "metaHashId": [
-              3980925849097472000
-            ],
-            "timestamp": 0
-          }
-        ]
-      },
-      {
-        "processId": 6,
-        "objectId": 670677,
-        "parentId": -1,
-        "isProcess": true,
-        "operation": [
-          0
-        ],
-        "objectDetail": [
-          {
-            "metaLinkId": 2643838120214620700,
-            "objectType": 2,
-            "operation": 0,
-            "metaHashId": [
-              3980925849097472000
-            ],
-            "timestamp": 0
-          }
-        ]
-      },
-      {
-        "processId": 7,
-        "objectId": 752007,
-        "parentId": -1,
-        "isProcess": true,
-        "operation": [
-          0
-        ],
-        "objectDetail": [
-          {
-            "metaLinkId": 5025766059227299000,
-            "objectType": 2,
-            "operation": 0,
-            "metaHashId": [
-              3980925849097472000
-            ],
-            "timestamp": 0
-          }
-        ]
-      },
-      {
-        "processId": 8,
-        "objectId": 758507,
-        "parentId": -1,
-        "isProcess": true,
-        "operation": [
-          0
-        ],
-        "objectDetail": [
-          {
-            "metaLinkId": 6592850145812724000,
-            "objectType": 2,
-            "operation": 0,
-            "metaHashId": [
-              3980925849097472000
-            ],
-            "timestamp": 0
-          }
-        ]
-      },
-      {
-        "processId": 9,
-        "objectId": 779796,
-        "parentId": -1,
-        "isProcess": true,
-        "operation": [
-          0
-        ],
-        "objectDetail": [
-          {
-            "metaLinkId": 9028573048887587000,
-            "objectType": 2,
-            "operation": 0,
-            "metaHashId": [
-              3980925849097472000
-            ],
-            "timestamp": 0
-          }
-        ]
-      },
-      {
-        "processId": 10,
-        "objectId": 803650,
-        "parentId": -1,
-        "isProcess": true,
-        "operation": [
-          0
-        ],
-        "objectDetail": [
-          {
-            "metaLinkId": 102681654548818700,
-            "objectType": 2,
-            "operation": 0,
-            "metaHashId": [
-              3980925849097472000
-            ],
-            "timestamp": 0
-          }
-        ]
-      },
-      {
-        "processId": 11,
-        "objectId": 972198,
-        "parentId": -1,
-        "isProcess": true,
-        "operation": [
-          0
-        ],
-        "objectDetail": [
-          {
-            "metaLinkId": 2044456315776696000,
-            "objectType": 2,
-            "operation": 0,
-            "metaHashId": [
-              3980925849097472000
-            ],
-            "timestamp": 0
-          }
-        ]
-      },
-      {
-        "processId": 12,
-        "objectId": 9,
         "parentId": 2,
+        "objectId": 3,
         "isProcess": true,
+        "opTime": "2011-01-01",
         "operation": [
-          1
+          0
         ],
         "objectDetail": [
           {
-            "metaLinkId": 6129042440142785000,
+            "metaLinkId": 8563228413029643000,
             "objectType": 2,
-            "operation": 1,
+            "operation": 0,
             "metaHashId": [
-              3453075238509377000,
-              8612722857851539000
+              3980925849097472000
             ],
-            "timestamp": 1421823140
+            "timestamp": 0
           }
         ]
       },
       {
-        "processId": 13,
+        "parentId": 2,
+        "objectId": 4,
+        "isProcess": true,
+        "opTime": "2011-01-01",
+        "operation": [
+          0
+        ],
+        "objectDetail": [
+          {
+            "metaLinkId": 8563228413029643000,
+            "objectType": 2,
+            "operation": 0,
+            "metaHashId": [
+              3980925849097472000
+            ],
+            "timestamp": 0
+          }
+        ]
+      },
+      {
+        "parentId": 2,
+        "objectId": 5,
+        "isProcess": true,
+        "opTime": "2011-01-01",
+        "operation": [
+          0
+        ],
+        "objectDetail": [
+          {
+            "metaLinkId": 8563228413029643000,
+            "objectType": 2,
+            "operation": 0,
+            "metaHashId": [
+              3980925849097472000
+            ],
+            "timestamp": 0
+          }
+        ]
+      },
+      {
+        "parentId": 5,
         "objectId": 6,
-        "parentId": 5,
         "isProcess": true,
+        "opTime": "2011-01-01",
         "operation": [
-          1
+          0
         ],
         "objectDetail": [
           {
-            "metaLinkId": 4909944740409523000,
+            "metaLinkId": 8563228413029643000,
             "objectType": 2,
-            "operation": 1,
+            "operation": 0,
             "metaHashId": [
-              7837415071161059000,
-              8822143207411172000
+              3980925849097472000
             ],
-            "timestamp": 1421823136
+            "timestamp": 0
           }
         ]
       },
       {
-        "processId": 14,
-        "objectId": 59,
         "parentId": 5,
+        "objectId": 7,
         "isProcess": true,
+        "opTime": "2011-01-01",
         "operation": [
-          1
+          0
         ],
         "objectDetail": [
           {
-            "metaLinkId": 3514117688544616000,
+            "metaLinkId": 8563228413029643000,
             "objectType": 2,
-            "operation": 1,
+            "operation": 0,
             "metaHashId": [
-              6183938688683813000,
-              7086478492107342000
+              3980925849097472000
             ],
-            "timestamp": 1421823183
+            "timestamp": 0
           }
         ]
       },
       {
-        "processId": 15,
-        "objectId": 232,
-        "parentId": 5,
+        "parentId": 7,
+        "objectId": 8,
         "isProcess": true,
+        "opTime": "2011-01-01",
         "operation": [
-          1
+          0
         ],
         "objectDetail": [
           {
-            "metaLinkId": 7031493764905505000,
+            "metaLinkId": 8563228413029643000,
             "objectType": 2,
-            "operation": 1,
+            "operation": 0,
             "metaHashId": [
-              6183938688683813000,
-              7086478492107342000
+              3980925849097472000
             ],
-            "timestamp": 1421823183
+            "timestamp": 0
+          }
+        ]
+      },
+      
+      {
+        "parentId": 5,
+        "objectId": 9,
+        "isProcess": true,
+        "opTime": "2011-01-01",
+        "operation": [
+          0
+        ],
+        "objectDetail": [
+          {
+            "metaLinkId": 8563228413029643000,
+            "objectType": 2,
+            "operation": 0,
+            "metaHashId": [
+              3980925849097472000
+            ],
+            "timestamp": 0
           }
         ]
       },
       {
-        "processId": 16,
-        "objectId": 254,
-        "parentId": 5,
+        "parentId": 9,
+        "objectId": 11,
         "isProcess": true,
+        "opTime": "2011-01-01",
         "operation": [
-          1
+          0
         ],
         "objectDetail": [
           {
-            "metaLinkId": 7029516842998359000,
+            "metaLinkId": 8563228413029643000,
             "objectType": 2,
-            "operation": 1,
+            "operation": 0,
             "metaHashId": [
-              1574211258266124800,
-              3873537618217823000
+              3980925849097472000
             ],
-            "timestamp": 1421823140
+            "timestamp": 0
           }
         ]
       },
       {
-        "processId": 17,
-        "objectId": 839,
-        "parentId": 5,
+        "parentId": 9,
+        "objectId": 12,
         "isProcess": true,
+        "opTime": "2011-01-01",
         "operation": [
-          1
+          0
         ],
         "objectDetail": [
           {
-            "metaLinkId": 763014146893545700,
+            "metaLinkId": 8563228413029643000,
             "objectType": 2,
-            "operation": 1,
+            "operation": 0,
             "metaHashId": [
-              6183938688683813000,
-              7086478492107342000
+              3980925849097472000
             ],
-            "timestamp": 1421823183
+            "timestamp": 0
           }
         ]
       },
       {
-        "processId": 18,
-        "objectId": 935,
-        "parentId": 5,
+        "parentId": 9,
+        "objectId": 13,
         "isProcess": true,
+        "opTime": "2011-01-01",
         "operation": [
-          1
+          0
         ],
         "objectDetail": [
           {
-            "metaLinkId": 1411995387717401900,
+            "metaLinkId": 8563228413029643000,
             "objectType": 2,
-            "operation": 1,
+            "operation": 0,
             "metaHashId": [
-              6424550970436577000,
-              8972436552156975000
+              3980925849097472000
             ],
-            "timestamp": 1421823183
-          }
-        ]
-      },
-      {
-        "processId": 19,
-        "objectId": 990,
-        "parentId": 5,
-        "isProcess": true,
-        "operation": [
-          1
-        ],
-        "objectDetail": [
-          {
-            "metaLinkId": 1421590825694907000,
-            "objectType": 2,
-            "operation": 1,
-            "metaHashId": [
-              6424550970436577000,
-              8972436552156975000
-            ],
-            "timestamp": 1421823183
-          }
-        ]
-      },
-      {
-        "processId": 20,
-        "objectId": 1068,
-        "parentId": 5,
-        "isProcess": true,
-        "operation": [
-          1
-        ],
-        "objectDetail": [
-          {
-            "metaLinkId": 3701810704881288700,
-            "objectType": 2,
-            "operation": 1,
-            "metaHashId": [
-              6183938688683813000,
-              7086478492107342000
-            ],
-            "timestamp": 1421823183
+            "timestamp": 0
           }
         ]
       }

@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { Map, fromJS, toJS } from 'immutable';
 import { connect } from 'react-redux';
-import {fetchFootprintsFromServer, toggleView, CHART_VIEW, TABLE_VIEW} from '../actions';
+import { fetchFootprintsFromServer, getMoreFootprint, toggleView, CHART_VIEW, TABLE_VIEW } from '../redux/actions';
 import ChartView from '../components/ChartView';
 import TableView from '../components/TableView';
 import _ from 'lodash';
@@ -12,7 +12,6 @@ class FootprintPage extends Component {
   }
   componentDidMount() {
     this.props.fetchFootprintsFromServer('foo', 'bar');
-
   }
   handleToggleView(view) {
     this.props.toggleView(view);
@@ -21,11 +20,13 @@ class FootprintPage extends Component {
     const footprints = this.props.footprints;
     const displayView = this.props.displayView;
     const View = displayView === TABLE_VIEW ? TableView : ChartView;
+
     return (
       <div>
-        <button onClick={() => this.handleToggleView(TABLE_VIEW) }>TABLE_VIEW</button>
-        <button onClick={() => this.handleToggleView(CHART_VIEW) }>CHART_VIEW</button>
-        <View serverMeta={footprints.serverMeta} processChain={footprints.processChain}/>
+        <button onClick={() => this.handleToggleView(TABLE_VIEW)}>TABLE_VIEW</button>
+        <button onClick={() => this.handleToggleView(CHART_VIEW)}>CHART_VIEW</button>
+        <button onClick={() => this.props.getMoreFootprint('aaa', 'bbb')}>Get more footpting</button>
+        <View serverMeta={footprints.serverMeta} processChain={footprints.processChain} />
       </div>
     );
   }
@@ -45,6 +46,10 @@ const mapDispatchToProps = (dispatch) => {
     fetchFootprintsFromServer: (tasiId, agentId) => {
       dispatch(fetchFootprintsFromServer(tasiId, agentId));
     },
+    getMoreFootprint: (tasiId, agentId) => {
+      dispatch(getMoreFootprint(tasiId, agentId));
+    },
+   
     toggleView: (view) => {
       dispatch(toggleView(view));
     }

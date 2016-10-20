@@ -9,7 +9,7 @@ class VertexTitle extends Component {
     const r = 10;
     const cx = x - w / 2 + r * 2;
     return (
-      <text className="vertex-title" textAnchor="middle" alignmentBaseline="central" x={x} y={y}>{title}</text>
+      <text data-id={id} className="vertex-title" textAnchor="middle" alignmentBaseline="central" x={x} y={y}>{title}</text>
     );
   }
 }

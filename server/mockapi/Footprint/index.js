@@ -7,19 +7,73 @@ const _ = require('lodash');
 const fs = require('fs');
 const path = require('path');
 const process = require('process');
-const here = path.resolve()
+const fake = require('./fake');
+const here = path.resolve();
+const moment = require('moment');
 module.exports = (function () {
   let router = require('express').Router();
-  router.get('/:taskId/:endpointId', getFootprintsByTaskIdAndEndpointId)
+  // router.get('/:taskId/:endpointId', getFootprintsByTaskIdAndEndpointId);
+  router.get('/:taskId/:endpointId', readSample);
+  router.get('/:taskId/:endpointId/more', getMoreFootprintsByTaskIdAndEndpointId);
+  router.get('/:taskId/:endpointId/:objId/parent', getParent);
+  router.get('/:taskId/:endpointId/:objId/child', getChild);
+  
   return router;
+
+
+  function readSample(req, res) {
+    const file = path.resolve(process.cwd(), 'server/mockapi/Footprint', 'sample.txt');
+    const lines = fs.readFileSync(file, 'utf8').toString().split('\n');
+    console.log(JSON.stringify(lines));
+    const regex = /^(\w)(?:\s)(\w)(?:\s)(\d{4}-\d{2}-\d{2})(?:\s)(.+)$/;
+    let json = [];
+    lines.map(l => {
+      const data = regex.exec(l);
+      console.log('data ->', JSON.stringify(data));
+      let [, pid, oid, unixTime, op] = data;
+      // let from = data[1];
+      // let to = data[2];
+      let opTime = moment(unixTime, "YYYY-MM-DD").add(_.random(86400 / 60, 'minutes')).unix();
+      // let op = data[4]
+      json.push({ pid, oid, opTime, op })
+    });
+    res.send({ Code: 0, Message: 'OK', Data: json });
+  }
+
+  function getParent(req, res) {
+    res.send({});
+  }
+  function getChild(req, res) {
+    res.send({});
+  }
+
+  function getMoreFootprintsByTaskIdAndEndpointId(req, res) {
+    let data = {
+      "Code": 0,
+      "Message": "OK",
+      "Data": {
+        "pluginTaskResult": {
+          "taskId": "",
+          "statusCode": 0
+        }
+      }
+    }
+    let randomData = fake.random(100);
+    data.Data.processChain = randomData.processChain;
+    data.Data.serverMeta = randomData.serverMeta;
+    res.send(data);
+  }
+
 
   function getFootprintsByTaskIdAndEndpointId(req, res) {
     let mock = true;
     if (mock) {
 
-      const file = path.resolve(process.cwd(),'server/mockapi/Footprint','mock.data.json');
+      const file = path.resolve(process.cwd(), 'server/mockapi/Footprint', 'mock.data.json');
 
-      let data = fs.readFileSync(file,'utf8');
+
+      let data = fs.readFileSync(file, 'utf8');
+
       res.send(JSON.parse(data));
 
     } else {

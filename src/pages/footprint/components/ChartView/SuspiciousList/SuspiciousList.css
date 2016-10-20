@@ -1,0 +1,13 @@
+#suspicious-list{
+  height: 400px;
+  position: relative;
+  overflow: scroll;
+  background-color: slategray;
+}
+
+.show-list{
+  width: 400px;
+}
+.hide-list{
+  width: 0px;
+}

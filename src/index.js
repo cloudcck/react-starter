@@ -5,7 +5,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { Route, Router, hashHistory, IndexRoute,browserHistory} from 'react-router';
-import { DashboardPage, AdministrationPage, AboutPage, TodoPage, FootprintPage } from './pages';
+import { DashboardPage, AdministrationPage, AboutPage, TodoPage, FootprintPage ,SimpleRootCauseChainPage} from './pages';
 import { Accounts, ProxySetting, WebConsoleSetting } from './pages/administration/containers';
 import store from './store';
 
@@ -28,6 +28,7 @@ ReactDOM.render(
           <Route path="console" component={WebConsoleSetting} />
         </Route>
         <Route path="footprint" component={FootprintPage}/>
+        <Route path="srcc" component={SimpleRootCauseChainPage}/>
       </Route>
     </Router>
   </Provider>,

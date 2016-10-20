@@ -10,8 +10,8 @@ class VertexIcon extends Component {
     const cx = x + r - width / 2;
     return (
       <g className="vertex-icon">
-        <circle r={r} cx={cx} cy={y} fill="gray"></circle>
-        <text textAnchor="middle" alignmentBaseline="central" x={cx} y={y}>{type}</text>
+        <circle data-id={id} r={r} cx={cx} cy={y} fill="gray"></circle>
+        <text data-id={id} textAnchor="middle" alignmentBaseline="central" x={cx} y={y}>{type}</text>
       </g>
     );
   }

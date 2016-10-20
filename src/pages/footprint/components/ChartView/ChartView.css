@@ -1,0 +1,6 @@
+#aside{
+  max-height: 400px;
+  width: 400px;
+  position: relative;
+  overflow: scroll;
+}

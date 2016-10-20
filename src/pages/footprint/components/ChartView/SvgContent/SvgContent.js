@@ -59,11 +59,14 @@ class SvgContent extends Component {
     _.values(this.props.processChain).forEach(obj => this.addNodeToGraph(this.state.graph, obj, true));
     dagre.layout(this.state.graph);
     const svgWidth = `${window.innerWidth}px`;
-    const svgHeight = `${window.innerHeight > 600 ? 600 : window.innerHeight}px`;
+    const svgHeight = `${window.innerHeight > 1200 ? 1200 : window.innerHeight}px`;
     const svgStyle = { width: svgWidth, height: svgHeight };
+    
     let edgeId = 1;
     return (
-      <div id="svg-content" style={svgStyle}>
+      <div id="svg-section" style={svgStyle}>
+        <span>Node count: {this.state.graph.nodeCount() }</span>
+        <span>Edge count: {this.state.graph.edgeCount() }</span>
         <svg width="100%" height="100%">
           <defs>
             <marker id="path_start" markerWidth="4" markerHeight="4" refX="2" refY="2" viewBox="0 0 4 4" orient="auto">
@@ -78,7 +81,7 @@ class SvgContent extends Component {
               this.state.graph.edges().map(e => <Edge key={edgeId++} data={e} points={this.state.graph.edge(e).points} />)
             }
             {
-              this.state.graph.nodes().map(n => <Vertex key={n} data={this.state.graph.node(n) } />)
+              this.state.graph.nodes().map(n => <Vertex key={n} data={this.state.graph.node(n)} showProcessDetail={this.props.showProcessDetail} />)
             }
           </g>
         </svg>
