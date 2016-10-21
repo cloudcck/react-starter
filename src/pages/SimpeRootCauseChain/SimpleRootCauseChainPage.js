@@ -64,11 +64,11 @@ const createGraph = () => {
   const GRAPH_SETTING = {
     rankdir: 'LR',
     align: 'UL',
-    nodesep: 25, // decrease up to down space in UL align
-    edgesep: 25, // decrease up to down space in UL align
+    // nodesep: 60, // decrease up to down space in UL align
+    edgesep: 60, // decrease up to down space in UL align
     ranksep: 60, // 50	Number of pixels between each rank in the layout . in LR dir, decrease space
-    marginx: 40,
-    marginy: 40
+    marginx: 10,
+    marginy: 10
   };
   let graph = new dagre.graphlib.Graph({ multigraph: true, directed: true, compound: false });
   graph.setGraph(GRAPH_SETTING);
@@ -90,35 +90,41 @@ const updateLayoutFromState = (graph, chains) => {
     HIGHTLIGHT: 'yellow',
   };
   const {vertexes, timeSlots} = chains;
+  console.warn(JSON.stringify(timeSlots));
 
+  const countMinLength = (srcVertex, destVertex) => {
+    const {id:s,latestTimeSlotFromSrc:s1,firstTimeSlotFromDest:s2} = srcVertex;
+    const {id:d,latestTimeSlotFromSrc:d1,firstTimeSlotFromDest:d2} = destVertex;
+    const srcSlotKey = _.size(srcVertex.src) ? s2: s1;
+    const destSlotKey = _.size(destVertex.dest) ? d2:d1;
+    
+    const i1 = _.indexOf(timeSlots,s1);
+    const i2 = _.indexOf(timeSlots,s2);
+    const i3 = _.indexOf(timeSlots,d1);
+    const i4 = _.indexOf(timeSlots,d2);
 
-  const countMinLength = (src, dest, xxxx) => {
-    console.log('timeSlots', JSON.stringify(timeSlots));
-    console.log(`src:${src} , dest: ${dest} ,dest2: ${xxxx}`);
-    const fromIndex = _.indexOf(timeSlots, src);
-    const toIndex1 = _.indexOf(timeSlots, dest);
-    const toIndex2 = _.indexOf(timeSlots, xxxx);
-    console.log(`fromIndex: ${fromIndex}, toIndex1:${toIndex2}, toIndex1:${toIndex2}`);
-    const length1 = toIndex1 - fromIndex;
-    const length2 = toIndex2 - fromIndex;
-    return length1 > length2 ? length1 : length2;
+    const srcIndex = _.indexOf(timeSlots,srcSlotKey);
+    const destIndex = _.indexOf(timeSlots,destSlotKey);
+    let length = destIndex - srcIndex;
+    length = length < 1 ? 1 :length;
+    console.log(`${s} : ${s1} - ${i1}, ${s2} -> ${i2}\n${d} : ${d1} - ${i3}, ${d2} -> ${i4}\n${s} to ${d} ====> ${length}`);
+    return  length;
   }
 
 
   _.forEach(vertexes, (d) => {
-    console.log('--------------------------------------', d.id);
-    graph.setNode(d.id, Object.assign({}, d, SIZE.MAX));
+    let {id: srcId} = d;
+    console.log('--------------------------------------', srcId);
+    graph.setNode(srcId, Object.assign({}, d, SIZE.MAX));
     if (_.size(d.dest)) {
-      _.forEach(d.dest, (obj, id) => {
-        if (!graph.hasNode(id)) {
-          graph.setNode(id, Object.assign({}, { id, label: _.get(vertexes[id], 'label', id) }, SIZE.MAX));
+      _.forEach(d.dest, (obj, destId) => {
+        if (!graph.hasNode(destId)) {
+          graph.setNode(destId, Object.assign({}, { destId, label: _.get(vertexes[destId], 'label', destId) }, SIZE.MAX));
         }
-        console.log(`${d.id} , ${id},${vertexes[d.id].latestTimeSlotFromSrc}, ${vertexes[id].latestTimeSlotFromSrc}, ${vertexes[id].firstTimeSlotFromDest}`)
-        let minlen = countMinLength(vertexes[d.id].latestTimeSlotFromSrc, vertexes[id].latestTimeSlotFromSrc, vertexes[id].firstTimeSlotFromDest);
+        // console.log(`${srcId} , ${destId},${vertexes[srcId].latestTimeSlotFromSrc}, ${vertexes[destId].latestTimeSlotFromSrc}, ${vertexes[destId].firstTimeSlotFromDest}`)
+        let minlen = countMinLength(vertexes[srcId], vertexes[destId]);
         minlen = minlen < 1 ? 1 : minlen;
-        console.log('---------->', d.id, id, obj.oper, minlen);
-        console.log(`${d.id} -> ${id} minlen=${minlen}`)
-        graph.setEdge(d.id, id, { name: obj.oper, time: obj.operTime, minlen });
+        graph.setEdge(srcId, destId, { name: obj.oper, time: obj.operTime, minlen });
       })
     }
   })
