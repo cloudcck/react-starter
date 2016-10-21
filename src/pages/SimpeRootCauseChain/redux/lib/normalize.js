@@ -47,37 +47,29 @@ const xxxReduce = (preveriousValue, currentValue) => {
   _.forEach(currentValue.vertexes, (value, id) => {
 
     if (_.has(vertexes, id)) {
+      let origin = vertexes[id];
+      origin.src = _.merge(origin.src, value.src);
+      origin.dest = _.merge(origin.dest, value.dest);
 
-      vertexes[id].src = _.merge(vertexes[id].src, value.src);
-      vertexes[id].dest = _.merge(vertexes[id].dest, value.dest);
-
-
-      let t1 = _.keys(vertexes[id].src)
-        .map((key) => [_.get(vertexes, `${key}.latestTimeFromSrc`)])
-        .reduce((pre, curr) => pre > curr ? pre : curr);
+      let t1 =
+        _.keys(origin.src)
+          .map((key) => _.get(vertexes, `${key}.latestTimeFromSrc`))
+          .reduce((pre, curr) => pre > curr ? pre : curr);
 
       let t2 = t1;
-      if (_.size(vertexes[id].dest)) {
-        t2 = _.keys(vertexes[id].dest)
-          .map((key) => _.get(vertexes, `${key}.firstTimeFromDest`, 0))
-          .reduce((pre, curr) => pre > curr ? pre : curr);
+      if (_.size(origin.dest)) {
+        t2 =
+          _.keys(origin.dest)
+            .map((key) => _.get(vertexes, `${key}.firstTimeFromDest`, 0))
+            .reduce((pre, curr) => pre > curr ? pre : curr);
       }
-
-      let t = t1 > t2 ? t1 : t2;
-      console.log(`${t1}\n${t2}\->${t}`)
-      console.log(`reduce UPDATE new vertex ${id} ------> ${JSON.stringify(vertexes[id])} `);
-      console.log(`update ${id} ->t1:${t} , ${moment.unix(t).format('YYYY-MM-DD')}`);
-
-      vertexes[id].latestTimeFromSrc = t1;
-      vertexes[id].latestTimeSlotFromSrc = moment.unix(t1).format('YYYY-MM-DD');
-
-      vertexes[id].firstTimeFromDest = t2;
-      vertexes[id].firstTimeSlotFromDest = moment.unix(t2).format('YYYY-MM-DD');
-
-      // vertexes[id].latestOperTime = vertexes[id].latestOperTime > value.latestOperTime ? vertexes[id].latestOperTime : value.latestOperTime;
-      // vertexes[id].timeSlot = value.timeSlot;
+      origin.latestTimeFromSrc = t1;
+      origin.latestTimeSlotFromSrc = moment.unix(t1).format('YYYY-MM-DD');
+      origin.firstTimeFromDest = t2;
+      origin.firstTimeSlotFromDest = moment.unix(t2).format('YYYY-MM-DD');
+      console.log(`UPDATE ${id} to ${JSON.stringify(origin)} `);
     } else {
-      console.log(`reduce ADD new vertex ${id}, ${JSON.stringify(value)} `);
+      console.log(`ADD ${id}\t${JSON.stringify(value)} `);
       vertexes[id] = value;
     }
   })

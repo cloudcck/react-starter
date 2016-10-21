@@ -19,7 +19,6 @@ export const fetchRemoteData = (taskId, agentId) => {
   }
 }
 const saveRemoteData = (processes) => {
-  console.log('saveRemoteData', processes);
   return {
     type: SAVE_REMOVE_DATA,
     processes
