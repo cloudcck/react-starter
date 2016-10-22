@@ -38,7 +38,7 @@ app.use(webpackDevMiddleware(compiler, {
     colors: true
   },
   historyApiFallback: true,
-  noInfo: false,
+  noInfo: true,
   // display no info to console (only warnings and errors)
 
   quiet: false,
