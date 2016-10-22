@@ -65,8 +65,8 @@ const createGraph = () => {
     rankdir: 'LR',
     align: 'UL',
     // nodesep: 60, // decrease up to down space in UL align
-    edgesep: 60, // decrease up to down space in UL align
-    ranksep: 60, // 50	Number of pixels between each rank in the layout . in LR dir, decrease space
+    edgesep: 20, // decrease up to down space in UL align
+    ranksep: 20, // 50	Number of pixels between each rank in the layout . in LR dir, decrease space
     marginx: 10,
     marginy: 10
   };
@@ -93,22 +93,25 @@ const updateLayoutFromState = (graph, chains) => {
   console.warn(JSON.stringify(timeSlots));
 
   const countMinLength = (srcVertex, destVertex) => {
-    const {id:s,latestTimeSlotFromSrc:s1,firstTimeSlotFromDest:s2} = srcVertex;
-    const {id:d,latestTimeSlotFromSrc:d1,firstTimeSlotFromDest:d2} = destVertex;
-    const srcSlotKey = _.size(srcVertex.src) ? s2: s1;
-    const destSlotKey = _.size(destVertex.dest) ? d2:d1;
-    
-    const i1 = _.indexOf(timeSlots,s1);
-    const i2 = _.indexOf(timeSlots,s2);
-    const i3 = _.indexOf(timeSlots,d1);
-    const i4 = _.indexOf(timeSlots,d2);
+    // const timeToKey = (time) => { moment.unix(time).format('YYYY-MM-DD') };
+    const {id: s, ts0: s_ts0, ts1: s_ts1} = srcVertex;
+    const {id: d, ts0: d_ts0, ts1: d_ts1} = destVertex;
+    const i1 = _.indexOf(timeSlots, s_ts0);
+    const i2 = _.indexOf(timeSlots, s_ts1);
+    const i3 = _.indexOf(timeSlots, d_ts0);
+    const i4 = _.indexOf(timeSlots, d_ts1);
 
-    const srcIndex = _.indexOf(timeSlots,srcSlotKey);
-    const destIndex = _.indexOf(timeSlots,destSlotKey);
+    const srcIndex = i1;
+    const destIndex = i4;
+
+
     let length = destIndex - srcIndex;
-    length = length < 1 ? 1 :length;
-    console.log(`${s} : ${s1} - ${i1}, ${s2} -> ${i2}\n${d} : ${d1} - ${i3}, ${d2} -> ${i4}\n${s} to ${d} ====> ${length}`);
-    return  length;
+    length = length < 1 ? 1 : length;
+    console.log(`${s} : ${s_ts0} - ${i1}, ${s_ts1} -> ${i2}`);
+    console.log(`${d} : ${d_ts0} - ${i3}, ${d_ts1} -> ${i4}`);
+    console.log(`${s} to ${d} ====> ${length}`);
+    // console.log('%s -> %s', destSlotKey, srcSlotKey);
+    return length;
   }
 
 
