@@ -6,42 +6,28 @@ export const normailze = (processes, fmt = 'YYYY-MM-DD') => {
     .map(e => mapFn(e, fmt))
     .reduce((pre, curr, index, array) => reduceFn(pre, curr, index, array));
 }
-
-const mapFn = (chain, fmt) => {
-  const {pid: parentId, oid: childId, op, opTime} = chain;
-  
-  const timeSlot = moment.unix(opTime).format(fmt);
-  return {
-    vertexes: {
-      [parentId]: {
-        id: parentId,
-        label: parentId,
-        src: {},
-        dest: { [childId]: { op, opTime } },
-        t0: opTime,
-        t1: opTime,
-        ts0: timeSlot,
-        ts1: timeSlot,
-
-      },
-      [childId]: {
-        id: childId,
-        label: childId,
-        src: { [parentId]: { op, opTime } },
-        dest: {},
-        t0: opTime,
-        t1: opTime,
-        ts0: timeSlot,
-        ts1: timeSlot,
-      }
-    },
-    timeSlots: [timeSlot]
-  }
-}
-
 const formatDate = (unixTime, fmt = 'YYYY-MM-DD') => {
   return moment.unix(unixTime).format(fmt);
 }
+
+const mapFn = (chain, fmt) => {
+  const {pid, oid, op, opTime: t} = chain;
+  const ts = formatDate(t, fmt);
+  const x = (id, label, src, dest, t, ts) => {
+    return { id, label, src, dest, t0: t, t1: t, ts0: ts, ts1: ts }
+  };
+  const src = { [pid]: { op, t } };
+  const dest = { [oid]: { op, t } };
+  return {
+    vertexes: {
+      [pid]: x(pid, pid, {}, dest, t, ts),
+      [oid]: x(oid, oid, src, {}, t, ts)
+    },
+    timeSlots: [ts]
+  }
+}
+
+
 
 const reduceFn = (pre, curr, index, array) => {
   let {vertexes, timeSlots} = _.clone(pre);
@@ -67,7 +53,7 @@ const reduceFn = (pre, curr, index, array) => {
     _.set(vertexes, `${src.id}.dest`, _.merge(origin.dest, src.dest));
   }
 
-// console.log('\tupdate time and timeslot')
+  // console.log('\tupdate time and timeslot')
   // update time slot
   _.values(vertexes).forEach((v) => {
     let {id, t0, ts0, t1, ts1} = v;
@@ -89,5 +75,5 @@ const reduceFn = (pre, curr, index, array) => {
     v.ts1 = formatDate(t1);
   });
 
-  return { vertexes, timeSlots:_.union(timeSlots, curr.timeSlots) };
+  return { vertexes, timeSlots: _.union(timeSlots, curr.timeSlots) };
 }
