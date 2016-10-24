@@ -1,0 +1,11 @@
+how to hinde none suspicious
+
+sol1 :
+    remove all none suspicious direct
+
+sol2 :
+    keep all none suspicious those are in the middle of suspicious objects 
+
+sol3 :
+    keep all none suspicious those are in the middle of suspicious objects (same as #2)
+    add latest parent of suspicious objects 

@@ -39,7 +39,6 @@ class SimpleRootCauseChain extends Component {
   }
 }
 
-
 const mapStateToProps = (state, ownProps = {}) => {
   return {
     chains: state.getIn(['rcpc', 'chains'], new Map()).toJS(),
@@ -100,31 +99,27 @@ const updateLayoutFromState = (graph, chains) => {
     const i2 = _.indexOf(timeSlots, s_ts1);
     const i3 = _.indexOf(timeSlots, d_ts0);
     const i4 = _.indexOf(timeSlots, d_ts1);
-
     const srcIndex = i1;
     const destIndex = i4;
-
+    console.log(`${s} : ${s_ts0} - ${i1}, ${s_ts1} -> ${i2}`);
+    console.log(`${d} : ${d_ts0} - ${i3}, ${d_ts1} -> ${i4}`);
 
     let length = destIndex - srcIndex;
     length = length < 1 ? 1 : length;
-    console.log(`${s} : ${s_ts0} - ${i1}, ${s_ts1} -> ${i2}`);
-    console.log(`${d} : ${d_ts0} - ${i3}, ${d_ts1} -> ${i4}`);
+
     console.log(`${s} to ${d} ====> ${length}`);
-    // console.log('%s -> %s', destSlotKey, srcSlotKey);
     return length;
   }
 
 
   _.forEach(vertexes, (d) => {
     let {id: srcId} = d;
-    console.log('--------------------------------------', srcId);
     graph.setNode(srcId, Object.assign({}, d, SIZE.MAX));
     if (_.size(d.dest)) {
       _.forEach(d.dest, (obj, destId) => {
         if (!graph.hasNode(destId)) {
           graph.setNode(destId, Object.assign({}, { destId, label: _.get(vertexes[destId], 'label', destId) }, SIZE.MAX));
         }
-        // console.log(`${srcId} , ${destId},${vertexes[srcId].latestTimeSlotFromSrc}, ${vertexes[destId].latestTimeSlotFromSrc}, ${vertexes[destId].firstTimeSlotFromDest}`)
         let minlen = countMinLength(vertexes[srcId], vertexes[destId]);
         minlen = minlen < 1 ? 1 : minlen;
         graph.setEdge(srcId, destId, { name: obj.oper, time: obj.operTime, minlen });

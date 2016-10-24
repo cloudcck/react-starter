@@ -31,7 +31,8 @@ const webpackConfig = {
 function getDevTool(env) {
   switch (env) {
     case DEVELOPMENT:
-      return 'eval';
+      // return 'eval';
+      return 'source-map';
     case PRODUCTION:
     default:
       return 'source-map';

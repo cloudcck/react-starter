@@ -31,14 +31,14 @@ app.use('/api', mockapi);
 
 app.use(express.static(PROJECT_CONFIG.PATH.DIST));
 app.use(webpackDevMiddleware(compiler, {
-  hot: true,
+  hot: false,
   fileName: 'bundle.js',
   publicpath: '/',
   status: {
     colors: true
   },
   historyApiFallback: true,
-  noInfo: true,
+  noInfo: false,
   // display no info to console (only warnings and errors)
 
   quiet: false,
