@@ -35,23 +35,15 @@ const reduceFn = (pre, curr, index, array) => {
   let src = curr.vertexes[keys[0]];
   let dest = curr.vertexes[keys[1]];
 
-  // handel child first
-  if (!_.has(vertexes, dest.id)) {
-    _.set(vertexes, dest.id, dest);
-  } else {
-    let origin = _.get(vertexes, dest.id)
-    _.set(vertexes, `${dest.id}.src`, _.merge(origin.src, dest.src));
-    _.set(vertexes, `${dest.id}.dest`, _.merge(origin.dest, dest.dest));
-  }
-
-  // handel parent later
-  if (!_.has(vertexes, src.id)) {
-    _.set(vertexes, src.id, src);
-  } else {
-    let origin = _.get(vertexes, src.id);
-    _.set(vertexes, `${src.id}.src`, _.merge(origin.src, src.src));
-    _.set(vertexes, `${src.id}.dest`, _.merge(origin.dest, src.dest));
-  }
+  _.forEach(curr.vertexes, (v, id) => {
+    if (!_.has(vertexes, id)) {
+      _.set(vertexes, id, v);
+    } else {
+      let origin = _.get(vertexes, id)
+      _.set(vertexes[id], 'src', _.merge(origin.src, v.src));
+      _.set(vertexes[id], 'dest', _.merge(origin.dest, v.dest));
+    }
+  });
 
   // console.log('\tupdate time and timeslot')
   // update time slot
@@ -61,12 +53,12 @@ const reduceFn = (pre, curr, index, array) => {
     const dests = _.keys(v.dest);
     if (_.size(srcs)) {
       t0 = srcs
-        .map((x) => pre.vertexes[x].t0)
+        .map((x) => vertexes[x].t0)
         .reduce((_pre, _curr) => _pre > _curr ? _pre : _curr);
     }
     if (_.size(dests)) {
       t1 = dests
-        .map((x) => _.get(vertexes, `${x}.t1`))
+        .map((x) => vertexes[x].t1)
         .reduce((_pre, _curr) => _pre < _curr ? _pre : _curr);
     }
     v.t0 = _.min([t0, t1]);
