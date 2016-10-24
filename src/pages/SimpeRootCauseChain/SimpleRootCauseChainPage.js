@@ -122,7 +122,7 @@ const updateLayoutFromState = (graph, chains) => {
         }
         let minlen = countMinLength(vertexes[srcId], vertexes[destId]);
         minlen = minlen < 1 ? 1 : minlen;
-        graph.setEdge(srcId, destId, { name: obj.oper, time: obj.operTime, minlen });
+        graph.setEdge(srcId, destId, { name: `${obj.op}_${obj.opTime}`, minlen });
       })
     }
   })
@@ -137,8 +137,8 @@ const transfer = (graph) => {
     const {name: oper, time: operTime} = graph.edge(e);
     return {
       id: `${e.v}_${graph.edge(e).name}_${e.w}`,
-      src: { x: srcX, y: srcY },
-      dest: { x: destX, y: destY },
+      src: { id: e.v, x: srcX, y: srcY },
+      dest: { id: e.w, x: destX, y: destY },
       oper, operTime
     }
   });
