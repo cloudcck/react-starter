@@ -22,7 +22,7 @@ const COLOR = {
 };
 
 const createGraph = () => {
- 
+
   return graph;
 }
 const countMinLength = (timeSlots, srcVertex, destVertex) => {
@@ -37,56 +37,53 @@ const countMinLength = (timeSlots, srcVertex, destVertex) => {
   const destIndex = i4;
   console.log(`${s} : ${s_ts0} - ${i1}, ${s_ts1} -> ${i2}`);
   console.log(`${d} : ${d_ts0} - ${i3}, ${d_ts1} -> ${i4}`);
-
   let length = destIndex - srcIndex;
   length = length < 1 ? 1 : length;
-
   console.log(`${s} to ${d} ====> ${length}`);
   return length;
 }
 
 const setEdgeAndNode = (graph, chains) => {
   const {vertexes, timeSlots} = chains;
-  console.warn(JSON.stringify(timeSlots));
-  _.forEach(vertexes, (d) => {
-    let {id: srcId} = d;
-    graph.setNode(srcId, Object.assign({}, d, SIZE.MAX));
-    if (_.size(d.dest)) {
-      _.forEach(d.dest, (obj, destId) => {
-        if (!graph.hasNode(destId)) {
-          graph.setNode(destId, Object.assign({}, { destId, label: _.get(vertexes[destId], 'label', destId) }, SIZE.MAX));
-        }
-        let minlen = countMinLength(timeSlots, vertexes[srcId], vertexes[destId]);
-        minlen = minlen < 1 ? 1 : minlen;
-        graph.setEdge(srcId, destId, { name: `${obj.op}_${obj.opTime}`, minlen });
-      })
-    }
+  _.forEach(vertexes, (v, vId) => {
+    graph.setNode(vId, Object.assign({}, v, SIZE.MAX));
+    _.forEach(v.dest, (opers, wId) => {
+      let w = vertexes[wId];
+      graph.setNode(wId, Object.assign({}, w, SIZE.MAX));
+      _.forEach(opers, operation => {
+        let {op: oper, t: time} = operation;
+        let edgeId = `${vId}_${oper}_${time}_${wId}`;
+        graph.setEdge(
+          {v:vId,w:wId,name:edgeId},
+          {id:edgeId,minlen: countMinLength(timeSlots, v, w),oper, time })
+      });
+    })
   });
   dagre.layout(graph);
 }
 const transfer = (graph) => {
-  
+
   let vertexes = graph.nodes().map(n => { return graph.node(n) });
   let edges = graph.edges().map(e => {
     const {x: srcX, y: srcY} = graph.node(e.v);
     const {x: destX, y: destY} = graph.node(e.w);
-    const {name: oper, time: operTime} = graph.edge(e);
+    const {id,oper,time} = graph.edge(e);
     return {
-      id: `${e.v}_${graph.edge(e).name}_${e.w}`,
+      id,oper, time,
       src: { id: e.v, x: srcX, y: srcY },
-      dest: { id: e.w, x: destX, y: destY },
-      oper, operTime
+      dest: { id: e.w, x: destX, y: destY }
+      
     }
   });
   return { vertexes, edges };
 }
 
- export const transferDataToGraphEdgeAndVertex =  (chains) =>{
-     let graph = new dagre.graphlib.Graph({ multigraph: true, directed: true, compound: false });
-      graph.setGraph(GRAPH_SETTING);
-      graph.setDefaultEdgeLabel(() => { return {}; });
-      setEdgeAndNode(graph, chains);
-    return transfer(graph);
-  }
+export const transferDataToGraphEdgeAndVertex = (chains) => {
+  let graph = new dagre.graphlib.Graph({ multigraph: true, directed: true, compound: false });
+  graph.setGraph(GRAPH_SETTING);
+  graph.setDefaultEdgeLabel(() => { return {}; });
+  setEdgeAndNode(graph, chains);
+  return transfer(graph);
+}
 
 

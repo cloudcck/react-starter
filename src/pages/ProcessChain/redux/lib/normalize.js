@@ -16,8 +16,8 @@ const mapFn = (chain, fmt) => {
   const x = (id, label, src, dest, t, ts) => {
     return { id, label, src, dest, t0: t, t1: t, ts0: ts, ts1: ts }
   };
-  const src = { [pid]: { op, t } };
-  const dest = { [oid]: { op, t } };
+  const src = { [pid]: [{ op, t }] };
+  const dest = { [oid]: [{ op, t }] };
   return {
     vertexes: {
       [pid]: x(pid, pid, {}, dest, t, ts),
@@ -27,6 +27,29 @@ const mapFn = (chain, fmt) => {
   }
 }
 
+const mergeObj = (ori, obj) => {
+  _.forEach(obj, (arr, key) => {
+    if (_.has(obj, key)) {
+      _.set(ori, key, arrayUnion(_.get(ori, key, []), arr));
+    } else {
+      _.set(ori, key, arr);
+    }
+  });
+
+  return ori;
+}
+const arrayUnion = (arr1, arr2) => {
+  let union = _.union(arr1, arr2);
+  for (let i = 0; i < union.length; i++) {
+    for (let j = i + 1; j < union.length; j++) {
+      if (_.isEqual((union[i], union[j]))) {
+        union.splice(j, 1);
+        j--;
+      }
+    }
+  }
+  return union;
+}
 
 
 const reduceFn = (pre, curr, index, array) => {
@@ -40,8 +63,8 @@ const reduceFn = (pre, curr, index, array) => {
       _.set(vertexes, id, v);
     } else {
       let origin = _.get(vertexes, id)
-      _.set(vertexes[id], 'src', _.merge(origin.src, v.src));
-      _.set(vertexes[id], 'dest', _.merge(origin.dest, v.dest));
+      _.set(vertexes[id], 'src', mergeObj(origin.src, v.src));
+      _.set(vertexes[id], 'dest', mergeObj(origin.dest, v.dest));
     }
   });
 
