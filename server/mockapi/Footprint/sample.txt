@@ -8,3 +8,7 @@ E G 2011-05-01 create
 E I 2011-07-02 create
 F J 2011-06-01 access
 F K 2011-06-01 drop
+K 1 2011-06-01 drop
+K 2 2011-06-02 drop
+K 3 2011-06-03 drop
+3 5 2011-06-04 drop

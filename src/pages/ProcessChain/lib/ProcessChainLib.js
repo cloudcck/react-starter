@@ -54,8 +54,8 @@ const setEdgeAndNode = (graph, chains) => {
         let {op: oper, t: time} = operation;
         let edgeId = `${vId}_${oper}_${time}_${wId}`;
         graph.setEdge(
-          {v:vId,w:wId,name:edgeId},
-          {id:edgeId,minlen: countMinLength(timeSlots, v, w),oper, time })
+          { v: vId, w: wId, name: edgeId },
+          { id: edgeId, minlen: countMinLength(timeSlots, v, w), oper, time })
       });
     })
   });
@@ -67,12 +67,12 @@ const transfer = (graph) => {
   let edges = graph.edges().map(e => {
     const {x: srcX, y: srcY} = graph.node(e.v);
     const {x: destX, y: destY} = graph.node(e.w);
-    const {id,oper,time} = graph.edge(e);
+    const {id, oper, time, points} = graph.edge(e);
     return {
-      id,oper, time,
+      id, oper, time, points,
       src: { id: e.v, x: srcX, y: srcY },
       dest: { id: e.w, x: destX, y: destY }
-      
+
     }
   });
   return { vertexes, edges };
