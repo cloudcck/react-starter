@@ -11,21 +11,15 @@ const exec = require('child_process').exec;
 const PROJECT_CONFIG = require('./config/PROJECT_CONFIG');
 
 // craete child process to start up mock api server
-exec('nodemon ./server/mockapi.js', (error, stdout, stderr) => {
-  if (error) {
-    console.error(`exec error: ${error}`);
-    return;
-  }
-  console.log(`stdout: ${stdout}`);
-  console.log(`stderr: ${stderr}`);
-});
-const options = {
-  target: `http://localhost:${PROJECT_CONFIG.PORT.MOCKAPI}`, // target host
-  changeOrigin: true,               // needed for virtual hosted sites
-};
+let apiProcess = exec('nodemon ./server/mockapi.js');
+apiProcess.stdout.on('data', data => console.log(data));
+apiProcess.stderr.on('data', data => console.log(data));
 
 // create the proxy for mock api
-var mockapi = proxy(options);
+var mockapi = proxy({
+  target: `http://localhost:${PROJECT_CONFIG.PORT.MOCKAPI}`, // target host
+  changeOrigin: true,               // needed for virtual hosted sites
+});
 app.use('/api', mockapi);
 
 
