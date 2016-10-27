@@ -10,7 +10,7 @@ const loki = require('lokijs');
 let db = new loki('loki.json');
 let processChainCollection = db.addCollection('processChain')
 
-const readSample = (req, res) => {
+const getProcessChain = (req, res) => {
   const file = path.resolve(process.cwd(), 'server/mockapi/Footprint', 'sample.txt');
   const lines = fs.readFileSync(file, 'utf8').toString().split('\n');
   const regex = /^(\w)(?:\s)(\w)(?:\s)(\d{4}-\d{2}-\d{2})(?:\s)(.+)$/;
@@ -111,4 +111,4 @@ const getMore = (req, res) => {
 }
 
 
-module.exports = { getChild, getMore, getParent, readSample };
+module.exports = { getChild, getMore, getParent, getProcessChain };

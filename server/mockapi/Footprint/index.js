@@ -4,7 +4,7 @@
 const api = require('./api');
 module.exports = (function () {
   let router = require('express').Router();
-  router.get('/:taskId/:endpointId', api.readSample);
+  router.get('/:taskId/:endpointId', api.getProcessChain);
   router.get('/:taskId/:endpointId/more', api.getMore);
   router.get('/:taskId/:endpointId/:objId/parent', api.getParent);
   router.get('/:taskId/:endpointId/:objId/child', api.getChild);
