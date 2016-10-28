@@ -1,30 +1,6 @@
 import dagre from 'dagre';
+import { GRAPH_SETTING, SIZE, COLOR } from './ProcessChainConfig';
 
-const GRAPH_SETTING = {
-  rankdir: 'LR',
-  align: 'UL',
-  nodesep: 50, // decrease up to down space in UL align
-  edgesep: 50, // decrease up to down space in UL align
-  ranksep: 80, // 50	Number of pixels between each rank in the layout . in LR dir, decrease space
-  marginx: 50,
-  marginy: 50
-};
-const SIZE = {
-  MAX: { width: 60, height: 30 },
-  MIN: { width: 40, height: 30 },
-};
-
-const COLOR = {
-  DANGER: 'red',
-  NORMAL: 'gray',
-  NONE: 'white',
-  HIGHTLIGHT: 'yellow',
-};
-
-const createGraph = () => {
-
-  return graph;
-}
 const countMinLength = (timeSlots, srcVertex, destVertex) => {
   // const timeToKey = (time) => { moment.unix(time).format('YYYY-MM-DD') };
   const {id: s, ts0: s_ts0, ts1: s_ts1} = srcVertex;
