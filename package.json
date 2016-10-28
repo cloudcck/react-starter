@@ -41,6 +41,7 @@
     "babel-polyfill": "^6.13.0",
     "bootstrap": "^3.3.7",
     "dagre": "^0.7.4",
+    "deepmerge": "^1.2.0",
     "font-awesome": "^4.6.3",
     "immutable": "^3.8.1",
     "isomorphic-fetch": "^2.2.1",

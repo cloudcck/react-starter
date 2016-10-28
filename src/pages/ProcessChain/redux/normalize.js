@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import moment from 'moment';
+import deepMerge from 'deepmerge';
 
 export const normailze = (processes, fmt = 'YYYY-MM-DD') => {
   return _.sortByAll(processes, ['opTime'], ['asc'])
@@ -27,51 +28,20 @@ const mapFn = (chain, fmt) => {
   }
 }
 
-const mergeObj = (ori, obj) => {
-  _.forEach(obj, (arr, key) => {
-    if (_.has(obj, key)) {
-      _.set(ori, key, arrayUnion(_.get(ori, key, []), arr));
-    } else {
-      _.set(ori, key, arr);
-    }
-  });
-
-  return ori;
-}
-const arrayUnion = (arr1, arr2) => {
-  let union = _.union(arr1, arr2);
-  for (let i = 0; i < union.length; i++) {
-    for (let j = i + 1; j < union.length; j++) {
-      if (_.isEqual((union[i], union[j]))) {
-        union.splice(j, 1);
-        j--;
-      }
-    }
-  }
-  return union;
-}
-
-
 const reduceFn = (pre, curr, index, array) => {
-  let {vertexes, timeSlots} = _.clone(pre);
-  const keys = _.keys(curr.vertexes);
-  let src = curr.vertexes[keys[0]];
-  let dest = curr.vertexes[keys[1]];
-
+  let {vertexes, timeSlots} = pre;
   _.forEach(curr.vertexes, (v, id) => {
     if (!_.has(vertexes, id)) {
       _.set(vertexes, id, v);
     } else {
-      let origin = _.get(vertexes, id)
-      _.set(vertexes[id], 'src', mergeObj(origin.src, v.src));
-      _.set(vertexes[id], 'dest', mergeObj(origin.dest, v.dest));
+      _.set(vertexes, id, deepMerge(_.get(vertexes, id), v));
     }
   });
 
   // console.log('\tupdate time and timeslot')
   // update time slot
   _.values(vertexes).forEach((v) => {
-    let {id, t0, ts0, t1, ts1} = v;
+    let {id, t0, ts0, t1, ts1, src, dest} = v;
     const srcs = _.keys(v.src);
     const dests = _.keys(v.dest);
     if (_.size(srcs)) {
