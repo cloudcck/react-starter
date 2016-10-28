@@ -3,11 +3,11 @@ import dagre from 'dagre';
 const GRAPH_SETTING = {
   rankdir: 'LR',
   align: 'UL',
-  nodesep: 60, // decrease up to down space in UL align
-  edgesep: 20, // decrease up to down space in UL align
-  ranksep: 20, // 50	Number of pixels between each rank in the layout . in LR dir, decrease space
-  marginx: 10,
-  marginy: 10
+  nodesep: 40, // decrease up to down space in UL align
+  edgesep: 40, // decrease up to down space in UL align
+  ranksep: 60, // 50	Number of pixels between each rank in the layout . in LR dir, decrease space
+  marginx: 50,
+  marginy: 50
 };
 const SIZE = {
   MAX: { width: 60, height: 30 },
@@ -39,7 +39,7 @@ const countMinLength = (timeSlots, srcVertex, destVertex) => {
   console.log(`${d} : ${d_ts0} - ${i3}, ${d_ts1} -> ${i4}`);
   let length = destIndex - srcIndex;
   length = length < 1 ? 1 : length;
-  console.log(`${s} to ${d} ====> ${length}`);
+  console.log(`${s} to ${d} ===> ${length}\n\t${s} : ${s_ts0} - ${i1}, ${s_ts1} -> ${i2}\n\t${d} : ${d_ts0} - ${i3}, ${d_ts1} -> ${i4}`);
   return length;
 }
 
@@ -72,7 +72,6 @@ const transfer = (graph) => {
       id, oper, time, points,
       src: { id: e.v, x: srcX, y: srcY },
       dest: { id: e.w, x: destX, y: destY }
-
     }
   });
   return { vertexes, edges };

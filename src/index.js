@@ -28,7 +28,7 @@ ReactDOM.render(
           <Route path="console" component={WebConsoleSetting} />
         </Route>
         <Route path="footprint" component={FootprintPage}/>
-        <Route path="srcc" component={ProcessChainPage}/>
+        <Route path="srcc/:taskId/:agentId" component={ProcessChainPage}/>
       </Route>
     </Router>
   </Provider>,

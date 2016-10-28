@@ -15,7 +15,7 @@ class Navbar extends Component {
           <li><NavLink to="/administration/proxy"    >Proxy</NavLink></li>
           <li><NavLink to="/administration/console"  >Console</NavLink></li>
           <li><NavLink to="/footprint"  >xxxFootprint</NavLink></li>
-          <li><NavLink to="/srcc">SimpleRootCauseChainPage</NavLink></li>
+          <li><NavLink to="/srcc/12345678-1234-6789-9012-123456789012/abcdefgh-abcd-efgh-ijkl-123456789012">SimpleRootCauseChainPage</NavLink></li>
         </ul>
       </div>
     );

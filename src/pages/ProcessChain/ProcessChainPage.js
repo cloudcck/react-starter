@@ -4,7 +4,7 @@ import dagre from 'dagre';
 import _ from 'lodash'
 import JSONTree from 'react-json-tree'
 
-import { fetchRemoteData } from './redux/action';
+import { fetchRemoteData, getMore, getParent, getChild } from './redux/action';
 import moment from 'moment';
 import Edge from './components/Edge';
 import Vertex from './components/Vertex';
@@ -15,12 +15,15 @@ class ProcessChain extends Component {
     super(props);
   }
   componentWillMount() {
-    this.props.fetchRemoteData('xxx', 'ooo');
+    let {taskId, agentId} = this.props.routeParams;
+    this.props.fetchRemoteData(taskId, agentId);
   }
   render() {
     const {edges, vertexes} = transferDataToGraphEdgeAndVertex(this.props.chains);
     return (
       <div>
+        <button onClick={() => { } }>Get More</button>
+
         <JSONTree data={this.props.chains} />
         {
           <svg width="100%" height="600px">
@@ -29,7 +32,7 @@ class ProcessChain extends Component {
                 edges.map(e => <Edge key={e.id} data={e} />)
               }
               {
-                vertexes.map(n => <Vertex key={n.id} data={n} />)
+                vertexes.map(n => <Vertex key={n.id} data={n} getParent={this.props.getParent} getChild={this.props.getChild}/>)
               }
             </g>
           </svg>
@@ -49,6 +52,15 @@ const mapDispatchToProps = (dispatch) => {
   return {
     fetchRemoteData: (tasiId, agentId) => {
       dispatch(fetchRemoteData(tasiId, agentId));
+    },
+    getParent: (tasiId, agentId, objectId) => {
+      dispatch(getParent(tasiId, agentId, objectId));
+    },
+    getChild: (tasiId, agentId, objectId) => {
+      dispatch(getChild(tasiId, agentId, objectId));
+    },
+    getMore: () => {
+      dispatch(getMore(tasiId, agentId));
     }
   };
 }

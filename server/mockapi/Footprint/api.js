@@ -48,9 +48,9 @@ const getParent = (req, res) => {
   }
   // console.log('aaa -->', JSON.stringify(aaa, '', 2));
   let data = { Code: 0, Message: 'OK', Data: [] };
-  for (let i = 1; i <= 3; i++) {
+  for (let i = 1; i <= 2; i++) {
     let row = {
-      pid: `${req.params.objId}_p${i}`,
+      pid: `${req.params.objId}${i}`,
       oid: req.params.objId,
       opTime: opTime,
       op: 'fake_parent'
@@ -65,11 +65,9 @@ const getChild = (req, res) => {
   let oid, opTime;
   if (dataFromLoki) {
     opTime = moment.unix(dataFromLoki.opTime).add(_.random(100), 'hours').unix();
-    console.log('11 ', dataFromLoki.opTime - opTime);
   } else {
     let newRecord = processChainCollection.findOne({ 'pid': { '$eq': req.params.objId } });
     opTime = moment.unix(newRecord.opTime).add(_.random(100), 'hours').unix();
-    console.log('22 ', newRecord.opTime - opTime);
     let row = {
       pid: `${req.params.objId}_c0`,
       oid: req.params.objId,
@@ -80,10 +78,10 @@ const getChild = (req, res) => {
   }
   // console.log('aaa -->', JSON.stringify(aaa, '', 2));
   let data = { Code: 0, Message: 'OK', Data: [] };
-  for (let i = 1; i <= 3; i++) {
+  for (let i = 1; i <= 2; i++) {
     let row = {
-      pid: `${req.params.objId}_c${i}`,
-      oid: req.params.objId,
+      pid: req.params.objId,
+      oid: `${req.params.objId}${i}`,
       opTime: opTime,
       op: 'fake_child'
     };
