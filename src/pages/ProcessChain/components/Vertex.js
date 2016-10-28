@@ -22,7 +22,7 @@ class Vertex extends Component {
     const y0 = y - h / 2;
     const y1 = y + h / 2;
     const fileColor = _.includes(['_D', 'K', 'L', 'W', 'X', 'Z'], this.props.data.id) ? 'red' : 'gray';
-    
+    const radius = 10;
     return (
       <g className="graph-vetex">
         <g className="" onClick={(e) => { this.getParent(e); } } >
@@ -30,7 +30,7 @@ class Vertex extends Component {
           <text className="vertex-title" textAnchor="middle" alignmentBaseline="central" x={x0-5} y={y0+5}>+</text>
         </g>
         <g>
-          <rect x={x - w / 2} y={y - h / 2} width={w} height={h} fill={fileColor} />
+          <rect x={x - w / 2} y={y - h / 2} width={w} height={h} rx={radius} ry={radius} fill={fileColor} />
           <text className="vertex-title" textAnchor="middle" alignmentBaseline="central" x={x} y={y}>{label}</text>
         </g>
         <g onClick={(e) => { this.getChild(e); } } >
