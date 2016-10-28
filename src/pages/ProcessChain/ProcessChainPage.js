@@ -20,6 +20,8 @@ class ProcessChain extends Component {
   }
   render() {
     const {edges, vertexes} = transferDataToGraphEdgeAndVertex(this.props.chains);
+    const getParentFn = this.props.getParent;
+    const getChildFn = this.props.getChild;
     return (
       <div>
         <button onClick={() => { } }>Get More</button>
@@ -31,12 +33,8 @@ class ProcessChain extends Component {
               <marker id="path_end" markerWidth="12" markerHeight="12" refX="6" refY="6" viewBox="0 0 12 12" orient="auto"><path d="M-6 0L6 6L-6 12 " fill="gray"></path></marker>
             </defs>
             <g>
-              {
-                edges.map(e => <Edge key={e.id} data={e} />)
-              }
-              {
-                vertexes.map(n => <Vertex key={n.id} data={n} getParent={this.props.getParent} getChild={this.props.getChild} />)
-              }
+              {edges.map(e => <Edge key={e.id} data={e} />)}
+              {vertexes.map(n => <Vertex key={n.id} data={n} getParent={getParentFn} getChild={getChildFn} />)}
             </g>
           </svg>
         }
