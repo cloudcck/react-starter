@@ -2,8 +2,8 @@
 export const GRAPH_SETTING = {
   rankdir: 'LR',
   align: 'UL',
-  nodesep: 50, // decrease up to down space in UL align
-  edgesep: 50, // decrease up to down space in UL align
+  nodesep: 30, // decrease up to down space in UL align
+  edgesep: 30, // decrease up to down space in UL align
   ranksep: 80, // 50	Number of pixels between each rank in the layout . in LR dir, decrease space
   marginx: 50,
   marginy: 50
