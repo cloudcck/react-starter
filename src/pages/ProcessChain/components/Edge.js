@@ -11,7 +11,7 @@ class Edge extends Component {
   render() {
     const {id, oper, time, points, dest: {y: minY}} = this.props.data;
     const operTextPath = this.createTextPath(id, -3, oper);
-    const timeTextPath = this.createTextPath(id, 10, moment.unix(time).format('YY/MM/DD | hh:mm'));
+    const timeTextPath = this.createTextPath(id, 10, moment.unix(time).format('YYYY/MM/DD|hh:mm'));
     const curve = points
       .map(p => `${p.x} ${p.y}`)
       .reduce((pre, curr, i) => i % 2 ? `${pre} Q ${curr}` : `${pre} ${curr}`, 'M');
