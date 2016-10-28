@@ -50,7 +50,7 @@ const getParent = (req, res) => {
   let data = { Code: 0, Message: 'OK', Data: [] };
   for (let i = 1; i <= 2; i++) {
     let row = {
-      pid: `${req.params.objId}${i}`,
+      pid: `${i}${req.params.objId}`,
       oid: req.params.objId,
       opTime: opTime,
       op: 'fake_parent'

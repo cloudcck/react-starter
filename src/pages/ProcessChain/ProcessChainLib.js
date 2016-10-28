@@ -3,9 +3,9 @@ import dagre from 'dagre';
 const GRAPH_SETTING = {
   rankdir: 'LR',
   align: 'UL',
-  nodesep: 40, // decrease up to down space in UL align
-  edgesep: 40, // decrease up to down space in UL align
-  ranksep: 60, // 50	Number of pixels between each rank in the layout . in LR dir, decrease space
+  nodesep: 50, // decrease up to down space in UL align
+  edgesep: 50, // decrease up to down space in UL align
+  ranksep: 80, // 50	Number of pixels between each rank in the layout . in LR dir, decrease space
   marginx: 50,
   marginy: 50
 };
@@ -35,8 +35,6 @@ const countMinLength = (timeSlots, srcVertex, destVertex) => {
   const i4 = _.indexOf(timeSlots, d_ts1);
   const srcIndex = i1;
   const destIndex = i4;
-  console.log(`${s} : ${s_ts0} - ${i1}, ${s_ts1} -> ${i2}`);
-  console.log(`${d} : ${d_ts0} - ${i3}, ${d_ts1} -> ${i4}`);
   let length = destIndex - srcIndex;
   length = length < 1 ? 1 : length;
   console.log(`${s} to ${d} ===> ${length}\n\t${s} : ${s_ts0} - ${i1}, ${s_ts1} -> ${i2}\n\t${d} : ${d_ts0} - ${i3}, ${d_ts1} -> ${i4}`);

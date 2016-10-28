@@ -17,15 +17,15 @@ class Vertex extends Component {
 
   render() {
     const {label, width: w, height: h, x, y} = this.props.data;
-    let x0 = x - w / 2;
-    let x1 = x + w / 2;
-    let y0 = y - h / 2;
-    let y1 = y + h / 2;
+    const x0 = x - w / 2;
+    const x1 = x + w / 2;
+    const y0 = y - h / 2;
+    const y1 = y + h / 2;
     const fileColor = _.includes(['_D', 'K', 'L', 'W', 'X', 'Z'], this.props.data.id) ? 'red' : 'gray';
-
+    
     return (
-      <g>
-        <g onClick={(e) => { this.getParent(e); } } >
+      <g className="graph-vetex">
+        <g className="" onClick={(e) => { this.getParent(e); } } >
           <rect x={x0-10} y={y0} width={10} height={10} fill="green"/>
           <text className="vertex-title" textAnchor="middle" alignmentBaseline="central" x={x0-5} y={y0+5}>+</text>
         </g>

@@ -15,10 +15,9 @@ class Edge extends Component {
     const curve = points
       .map(p => `${p.x} ${p.y}`)
       .reduce((pre, curr, i) => i % 2 ? `${pre} Q ${curr}` : `${pre} ${curr}`, 'M');
-
     return (
       <g className="graph-edge">
-        <path id={id} d={curve} fill="transparent" stroke="#000000" strokeWidth="1" ></path>
+        <path id={id} d={curve} fill="transparent" stroke="#000000" strokeWidth="1"  markerStart="url(#path_start)" markerEnd="url(#path_end)"></path>
         <text textAnchor="middle" dangerouslySetInnerHTML={{ __html: operTextPath }} />
         <text textAnchor="middle" dangerouslySetInnerHTML={{ __html: timeTextPath }} />
       </g>
