@@ -3,17 +3,19 @@ import { GRAPH_SETTING, SIZE, COLOR } from './ProcessChainConfig';
 
 const countMinLength = (timeSlots, srcVertex, destVertex) => {
   // const timeToKey = (time) => { moment.unix(time).format('YYYY-MM-DD') };
+  // console.log('timeSlots :', timeSlots);
   const {id: s, ts0: s_ts0, ts1: s_ts1} = srcVertex;
   const {id: d, ts0: d_ts0, ts1: d_ts1} = destVertex;
   const i1 = _.indexOf(timeSlots, s_ts0);
   const i2 = _.indexOf(timeSlots, s_ts1);
   const i3 = _.indexOf(timeSlots, d_ts0);
   const i4 = _.indexOf(timeSlots, d_ts1);
-  const srcIndex = i1;
+  const srcIndex = _.size(srcVertex.src) ? i2 : i1;
+  // const srcIndex = i1;
   const destIndex = i4;
   let length = destIndex - srcIndex;
   length = length < 1 ? 1 : length;
-  console.log(`${s} to ${d} ===> ${length}\n\t${s} : ${s_ts0} - ${i1}, ${s_ts1} -> ${i2}\n\t${d} : ${d_ts0} - ${i3}, ${d_ts1} -> ${i4}`);
+  // console.log(`${s} to ${d} ===> ${length}\n\t${s} : ${s_ts0} - ${i1}, ${s_ts1} -> ${i2}\n\t${d} : ${d_ts0} - ${i3}, ${d_ts1} -> ${i4}`);
   return length;
 }
 
