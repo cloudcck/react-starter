@@ -49,24 +49,13 @@ const recursive = (chains, root, v, nodes, edges, isVirtual, hiddenNodes) => {
 const setEdgeAndNode = (graph, chains, hiddenNodes = []) => {
   const {vertexes, timeSlots} = chains;
   _.forEach(vertexes, (v, vId) => {
-    console.log('setEdgeAndNode on ', vId);
-
     if (notHidden(hiddenNodes, vId)) {
       graph.setNode(vId, Object.assign({}, v, SIZE.MAX));
       let {nodes, edges} = recursive(chains, v, v, [], [], false, hiddenNodes);
-      // console.log('\tnodes:', JSON.stringify(nodes));
-      // console.log('\tedges:', JSON.stringify(edges));
-      _.forEach(nodes, (n) => {
-        graph.setNode(n.id, Object.assign({}, n, SIZE.MAX));
-      });
-
-      _.forEach(edges, (e) => {
-        console.log('add edge :', JSON.stringify(e, '', 2));
-        graph.setEdge({ v: e.v, w: e.w, name: e.name }, { id: e.id, minlen: e.minlen, oper: e.oper, time: e.time, virtual: e.virtual })
-      });
+      _.forEach(nodes, (n) => { graph.setNode(n.id, Object.assign({}, n, SIZE.MAX)); });
+      _.forEach(edges, (e) => { graph.setEdge({ v: e.v, w: e.w, name: e.name }, { id: e.id, minlen: e.minlen, oper: e.oper, time: e.time, virtual: e.virtual }) });
     }
   });
-
   dagre.layout(graph);
 }
 
@@ -74,11 +63,8 @@ const setEdgeAndNode = (graph, chains, hiddenNodes = []) => {
 
 
 const transfer = (graph) => {
-  let vertexes = graph.nodes().map(n => { console.log('--> n', n, JSON.stringify(graph.node(n))); return graph.node(n) });
+  let vertexes = graph.nodes().map(n => { return graph.node(n) });
   let edges = graph.edges().map(e => {
-    console.log('---> e:', e);
-    console.log('---> e.v', e.v);
-    console.log('---> e.w', e.w);
     const {x: srcX, y: srcY} = graph.node(e.v);
     const {x: destX, y: destY} = graph.node(e.w);
     const {id, oper, time, points, virtual} = graph.edge(e);
@@ -92,7 +78,6 @@ const transfer = (graph) => {
 }
 
 export const transferDataToGraphEdgeAndVertex = (chains, hiddenNodes) => {
-  // console.log('transferDataToGraphEdgeAndVertex states :',hiddenNodes)
   let graph = new dagre.graphlib.Graph({ multigraph: true, directed: true, compound: false });
   graph.setGraph(GRAPH_SETTING);
   graph.setDefaultEdgeLabel(() => { return {}; });

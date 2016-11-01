@@ -15,6 +15,7 @@ class ProcessChain extends PureComponent {
     super(props);
     this.toggleHidden = this.toggleHidden.bind(this);
     this.toggleSize = this.toggleSize.bind(this);
+    this.reAddVertex = this.reAddVertex.bind(this);
   }
   componentWillMount() {
     let {taskId, agentId} = this.props.routeParams;
@@ -22,15 +23,25 @@ class ProcessChain extends PureComponent {
     this.state = { hiddenNodes: [], smallNodes: [] };
     console.log('componentWillMount  ', JSON.stringify(this.state))
   }
-  shouldComponentUpdate(nextProps, nextState) {
-    return !_.isEqual(this.props, nextProps) || !_.isEqual(this.state, nextState)
-  }
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   return !_.isEqual(this.props, nextProps) || !_.isEqual(this.state, nextState)
+  // }
 
   toggleHidden(id) {
-    console.log('ProcessChainPage toggleHidden ',id);
+    console.log('ProcessChainPage toggleHidden ', id);
     const newState = Object.assign({}, this.state, { hiddenNodes: _.uniq([...this.state.hiddenNodes, id]) });
     this.setState(newState);
     console.log('after toggle Hidden ,', JSON.stringify(this.state));
+  }
+  reAddVertex(id) {
+    // let a = _.remove(this.state.hiddenNodes, (n) => { return n === id })
+
+    let a = this.state.hiddenNodes.filter(n=>n !== id);
+
+    console.log('a->',JSON.stringify(a))
+    const newState = Object.assign({}, this.state, { hiddenNodes: a });
+    console.log('new state:',JSON.stringify(newState));
+    this.setState(newState);
   }
   toggleSize(id) {
     console.log('toggle size node ', id);
@@ -66,6 +77,9 @@ class ProcessChain extends PureComponent {
             </g>
           </svg>
         }
+        <div>
+          {hiddenNodes.map(n => <button key={n} onClick={() => { this.reAddVertex(n) } }>{n}</button>)}
+        </div>
       </div>
     );
   }
