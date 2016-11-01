@@ -10,10 +10,8 @@ const chains = (state = new Map(), action) => {
       state = fromJS(normailze(action.processes));
       return state;
     case APPEND_PROCESS_CHAIN_DATA:
-      let {vertexes, timeSlots} = normailze(action.processes);
       return state
-        .mergeDeepIn(['vertexes'], fromJS(vertexes))
-        .mergeDeepIn(['timeSlots'], fromJS(timeSlots));
+        .mergeDeep(fromJS(normailze(action.processes)))
     default:
       return state;
   }

@@ -18,43 +18,39 @@ const mapFn = (chain, fmt) => {
   const src = { [pid]: [{ op, t }] };
   const dest = { [oid]: [{ op, t }] };
   return {
-    vertexes: {
-      [pid]: x(pid, pid, {}, dest, t, ts),
-      [oid]: x(oid, oid, src, {}, t, ts)
-    },
-    timeSlots: [ts]
+    [pid]: x(pid, pid, {}, dest, t, ts),
+    [oid]: x(oid, oid, src, {}, t, ts)
   }
 }
 
 const reduceFn = (pre, curr, index, array) => {
-  
-  let {vertexes, timeSlots} = pre;
-  _.forEach(curr.vertexes, (v, id) => {
-    if (!_.has(vertexes, id)) {
-      _.set(vertexes, id, v);
+
+  _.forEach(curr, (v, id) => {
+    if (!_.has(pre, id)) {
+      _.set(pre, id, v);
     } else {
-      _.set(vertexes, id, deepMerge(_.get(vertexes, id), v));
+      _.set(pre, id, deepMerge(_.get(pre, id), v));
     }
   });
 
   // update time slot
-  _.values(vertexes).forEach((v) => {
+  _.values(pre).forEach((v) => {
     let {id, t0, ts0, t1, ts1, src, dest} = v;
-    let _t0 = compareTime(src, t0,_.max);
-    let _t1 = compareTime(dest, t1,_.min);
+    let _t0 = compareTime(src, t0, _.max);
+    let _t1 = compareTime(dest, t1, _.min);
     v.t0 = _.min([_t0, _t1]);
     v.t1 = _.max([_t0, _t1]);
     v.ts0 = formatDate(v.t0);
     v.ts1 = formatDate(v.t1);
   });
-  return { vertexes, timeSlots: _.union(timeSlots, curr.timeSlots) };
+  return pre;
 }
 
 const formatDate = (unixTime, fmt = 'YYYY-MM-DD') => {
   return moment.unix(unixTime).format(fmt);
 }
 
-const compareTime = (obj, defalutValue,compareFn) => {
+const compareTime = (obj, defalutValue, compareFn) => {
   if (_.isEmpty(obj)) return defalutValue;
   let arr = [];
   _.forEach(obj, (value, key) => {

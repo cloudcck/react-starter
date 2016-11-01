@@ -1,6 +1,6 @@
 import dagre from 'dagre';
 import { GRAPH_SETTING, SIZE, COLOR } from './ProcessChainConfig';
-
+import moment from 'moment';
 const countMinLength = (timeSlots, srcVertex, destVertex) => {
   // const timeToKey = (time) => { moment.unix(time).format('YYYY-MM-DD') };
   // console.log('timeSlots :', timeSlots);
@@ -22,8 +22,7 @@ const countMinLength = (timeSlots, srcVertex, destVertex) => {
 
 const notHidden = (hiddenNodes, nodeId) => { return !hiddenNodes.includes(nodeId) }
 
-const recursive = (chains, root, v, nodes, edges, isVirtual, hiddenNodes) => {
-  const {vertexes, timeSlots} = chains;
+const recursive = (vertexes, timeKeys, root, v, nodes, edges, isVirtual, hiddenNodes) => {
   if (_.isEmpty(v.dest)) {
     return { nodes, edges };
   } else {
@@ -34,10 +33,10 @@ const recursive = (chains, root, v, nodes, edges, isVirtual, hiddenNodes) => {
         _.forEach(opers, operation => {
           let {op: oper, t: time} = operation;
           let edgeId = `${root.id}_${oper}_${time}_${wId}`;
-          edges.push({ v: root.id, w: wId, name: edgeId, id: edgeId, minlen: countMinLength(timeSlots, v, w), oper, time, virtual: isVirtual })
+          edges.push({ v: root.id, w: wId, name: edgeId, id: edgeId, minlen: countMinLength(timeKeys, v, w), oper, time, virtual: isVirtual })
         });
       } else {
-        const {_nodes, _edges} = recursive(chains, root, w, nodes, edges, true, hiddenNodes);
+        const {_nodes, _edges} = recursive(vertexes, timeKeys, root, w, nodes, edges, true, hiddenNodes);
         nodes = _.union(nodes, _nodes);
         edges = _.union(edges, _edges);
       }
@@ -45,13 +44,22 @@ const recursive = (chains, root, v, nodes, edges, isVirtual, hiddenNodes) => {
   }
   return { nodes, edges };
 }
+const generateTimeKeys = (vertexes, hiddenNodes) => {
+  let timeKeys = [];
+  _.forEach(vertexes, (v, id) => {
+    if (notHidden(hiddenNodes, id)) {
+      timeKeys = _.union(timeKeys, [moment.unix(v.t0).format('YYYY-MM-DD'), moment.unix(v.t1).format('YYYY-MM-DD')])
+    }
+  })
+  return timeKeys.sort();
+}
 
-const setEdgeAndNode = (graph, chains, hiddenNodes = []) => {
-  const {vertexes, timeSlots} = chains;
+const setEdgeAndNode = (graph, vertexes, hiddenNodes = []) => {
+  const timeKeys = generateTimeKeys(vertexes, hiddenNodes);
   _.forEach(vertexes, (v, vId) => {
     if (notHidden(hiddenNodes, vId)) {
       graph.setNode(vId, Object.assign({}, v, SIZE.MAX));
-      let {nodes, edges} = recursive(chains, v, v, [], [], false, hiddenNodes);
+      let {nodes, edges} = recursive(vertexes, timeKeys, v, v, [], [], false, hiddenNodes);
       _.forEach(nodes, (n) => { graph.setNode(n.id, Object.assign({}, n, SIZE.MAX)); });
       _.forEach(edges, (e) => { graph.setEdge({ v: e.v, w: e.w, name: e.name }, { id: e.id, minlen: e.minlen, oper: e.oper, time: e.time, virtual: e.virtual }) });
     }
@@ -77,11 +85,11 @@ const transfer = (graph) => {
   return { vertexes, edges };
 }
 
-export const transferDataToGraphEdgeAndVertex = (chains, hiddenNodes) => {
+export const transferDataToGraphEdgeAndVertex = (vertextes, hiddenNodes) => {
   let graph = new dagre.graphlib.Graph({ multigraph: true, directed: true, compound: false });
   graph.setGraph(GRAPH_SETTING);
   graph.setDefaultEdgeLabel(() => { return {}; });
-  setEdgeAndNode(graph, chains, hiddenNodes);
+  setEdgeAndNode(graph, vertextes, hiddenNodes);
   return transfer(graph);
 }
 

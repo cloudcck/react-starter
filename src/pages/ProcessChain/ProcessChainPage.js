@@ -28,19 +28,11 @@ class ProcessChain extends PureComponent {
   // }
 
   toggleHidden(id) {
-    console.log('ProcessChainPage toggleHidden ', id);
     const newState = Object.assign({}, this.state, { hiddenNodes: _.uniq([...this.state.hiddenNodes, id]) });
-    this.setState(newState);
-    console.log('after toggle Hidden ,', JSON.stringify(this.state));
+    this.setState(newState,()=>{console.log('after toggle Hidden ,', JSON.stringify(this.state))});
   }
   reAddVertex(id) {
-    // let a = _.remove(this.state.hiddenNodes, (n) => { return n === id })
-
-    let a = this.state.hiddenNodes.filter(n=>n !== id);
-
-    console.log('a->',JSON.stringify(a))
-    const newState = Object.assign({}, this.state, { hiddenNodes: a });
-    console.log('new state:',JSON.stringify(newState));
+    const newState = Object.assign({}, this.state, { hiddenNodes: this.state.hiddenNodes.filter(n=>n !== id) });
     this.setState(newState);
   }
   toggleSize(id) {
@@ -52,13 +44,12 @@ class ProcessChain extends PureComponent {
 
   render() {
     const {hiddenNodes} = this.state;
-    const {edges, vertexes} = transferDataToGraphEdgeAndVertex(this.props.chains, hiddenNodes);
+    const {edges, vertexes} = transferDataToGraphEdgeAndVertex(this.props.chains,hiddenNodes);
     const getParentFn = this.props.getParent;
     const getChildFn = this.props.getChild;
     return (
       <div>
         <button onClick={() => { } }>Get More</button>
-        <JSONTree data={this.props.chains} />
         {
           <svg width="100%" height="600px">
             <defs>
