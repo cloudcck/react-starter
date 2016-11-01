@@ -20,25 +20,28 @@ const countMinLength = (timeSlots, srcVertex, destVertex) => {
 }
 
 
-const notHidden = (hiddenNodes, nodeId) => { return !hiddenNodes.includes(nodeId) }
+const notHidden = (hiddenNodes, nodeId) => {
+  return !hiddenNodes.includes(nodeId);
+}
 
-const recursive = (vertexes, timeKeys, root, v, nodes, edges, isVirtual, hiddenNodes) => {
-  if (_.isEmpty(v.dest)) {
+const recursive = (vertexes, timeKeys, rootVertex, parentVertex, nodes, edges, isVirtual, hiddenNodes) => {
+  // console.log('resurcive ', rootVertex.id, parentVertex.id, nodes.length, edges.length);
+  if (_.isEmpty(parentVertex.dest)) {
     return { nodes, edges };
   } else {
-    _.forEach(v.dest, (opers, wId) => {
+    _.forEach(parentVertex.dest, (opers, wId) => {
       let w = vertexes[wId];
       if (notHidden(hiddenNodes, wId)) {
         nodes.push(w);
         _.forEach(opers, operation => {
           let {op: oper, t: time} = operation;
-          let edgeId = `${root.id}_${oper}_${time}_${wId}`;
-          edges.push({ v: root.id, w: wId, name: edgeId, id: edgeId, minlen: countMinLength(timeKeys, v, w), oper, time, virtual: isVirtual })
+          let edgeId = `${rootVertex.id}_${oper}_${time}_${wId}`;
+          edges.push({ v: rootVertex.id, w: wId, name: edgeId, id: edgeId, minlen: countMinLength(timeKeys, parentVertex, w), oper, time, virtual: isVirtual });
         });
       } else {
-        const {_nodes, _edges} = recursive(vertexes, timeKeys, root, w, nodes, edges, true, hiddenNodes);
-        nodes = _.union(nodes, _nodes);
-        edges = _.union(edges, _edges);
+        const {nodes: _n, edges: _e} = recursive(vertexes, timeKeys, rootVertex, w, nodes, edges, true, hiddenNodes);
+        nodes = _.union(nodes, _n);
+        edges = _.union(edges, _e);
       }
     })
   }
@@ -57,13 +60,18 @@ const generateTimeKeys = (vertexes, hiddenNodes) => {
 const setEdgeAndNode = (graph, vertexes, hiddenNodes = []) => {
   const timeKeys = generateTimeKeys(vertexes, hiddenNodes);
   _.forEach(vertexes, (v, vId) => {
+
     if (notHidden(hiddenNodes, vId)) {
       graph.setNode(vId, Object.assign({}, v, SIZE.MAX));
-      let {nodes, edges} = recursive(vertexes, timeKeys, v, v, [], [], false, hiddenNodes);
+      const {nodes, edges} = recursive(vertexes, timeKeys, v, v, [], [], false, hiddenNodes);
+
       _.forEach(nodes, (n) => { graph.setNode(n.id, Object.assign({}, n, SIZE.MAX)); });
       _.forEach(edges, (e) => { graph.setEdge({ v: e.v, w: e.w, name: e.name }, { id: e.id, minlen: e.minlen, oper: e.oper, time: e.time, virtual: e.virtual }) });
     }
   });
+
+
+
   dagre.layout(graph);
 }
 
