@@ -6,6 +6,8 @@ class Vertex extends Component {
     super(props);
     this.getParent = this.getParent.bind(this);
     this.getChild = this.getChild.bind(this);
+    this.doubleClickHandler = this.doubleClickHandler.bind(this);
+    this.hideVertex = this.hideVertex.bind(this);
   }
 
   getParent(event) {
@@ -16,11 +18,25 @@ class Vertex extends Component {
     console.log('getChild:', this.props.data.id);
     this.props.getChild('ccc', 'ddd', this.props.data.id);
   }
+
+  doubleClickHandler(event) {
+    const id = this.props.data.id;
+    console.log('click handler ctrl:%s, shift:%s, alt:%s, %s', event.ctrlKey,
+      event.shiftKey,
+      event.altKey, new Date());
+    if (event.shiftKey) {
+      this.props.toggleHidden(id);
+    } else if (event.altKey) {
+      this.props.toggleSize(id);
+    }
+
+  }
   toggleSize(id) {
     console.log('toggle size of ', id);
   }
-  toggleHidden(id) {
-    console.log('toggle hidden of ', id);
+  hideVertex(id) {
+    console.log('Vertex toggle hidden of ', id);
+    this.props.toggleHidden(id);
   }
 
   render() {
@@ -33,12 +49,12 @@ class Vertex extends Component {
       { label: 'p', color: 'red', bindFn: this.getParent },
       { label: 'c', color: 'green', bindFn: this.getChild },
       { label: 's', color: 'yellow', bindFn: this.toggleSize },
-      { label: 'h', color: 'gray', bindFn: this.toggleHidden }
+      { label: 'h', color: 'gray', bindFn: this.hideVertex }
     ];
 
     return (
       <g className="graph-vetex">
-        <g>
+        <g onClick={() => this.props.showNodeDetail(id)} onDoubleClick={(e) => this.doubleClickHandler(e)}>
           <rect x={x - w / 2} y={y - h / 2} width={w} height={h} rx={radius} ry={radius} fill={fileColor} />
           <text className="vertex-title" textAnchor="middle" alignmentBaseline="central" x={x} y={y}>{label}</text>
         </g>

@@ -19,33 +19,71 @@ const countMinLength = (timeSlots, srcVertex, destVertex) => {
   return length;
 }
 
-const setEdgeAndNode = (graph, chains) => {
+
+const notHidden = (hiddenNodes, nodeId) => { return !hiddenNodes.includes(nodeId) }
+
+const recursive = (chains, root, v, nodes, edges, isVirtual, hiddenNodes) => {
   const {vertexes, timeSlots} = chains;
-  _.forEach(vertexes, (v, vId) => {
-    graph.setNode(vId, Object.assign({}, v, SIZE.MAX));
+  if (_.isEmpty(v.dest)) {
+    return { nodes, edges };
+  } else {
     _.forEach(v.dest, (opers, wId) => {
       let w = vertexes[wId];
-      graph.setNode(wId, Object.assign({}, w, SIZE.MAX));
-      _.forEach(opers, operation => {
-        let {op: oper, t: time} = operation;
-        let edgeId = `${vId}_${oper}_${time}_${wId}`;
-        graph.setEdge(
-          { v: vId, w: wId, name: edgeId },
-          { id: edgeId, minlen: countMinLength(timeSlots, v, w), oper, time })
-      });
+      if (notHidden(hiddenNodes, wId)) {
+        nodes.push(w);
+        _.forEach(opers, operation => {
+          let {op: oper, t: time} = operation;
+          let edgeId = `${root.id}_${oper}_${time}_${wId}`;
+          edges.push({ v: root.id, w: wId, name: edgeId, id: edgeId, minlen: countMinLength(timeSlots, v, w), oper, time, virtual: isVirtual })
+        });
+      } else {
+        const {_nodes, _edges} = recursive(chains, root, w, nodes, edges, true, hiddenNodes);
+        nodes = _.union(nodes, _nodes);
+        edges = _.union(edges, _edges);
+      }
     })
+  }
+  return { nodes, edges };
+}
+
+const setEdgeAndNode = (graph, chains, hiddenNodes = []) => {
+  const {vertexes, timeSlots} = chains;
+  _.forEach(vertexes, (v, vId) => {
+    console.log('setEdgeAndNode on ', vId);
+
+    if (notHidden(hiddenNodes, vId)) {
+      graph.setNode(vId, Object.assign({}, v, SIZE.MAX));
+      let {nodes, edges} = recursive(chains, v, v, [], [], false, hiddenNodes);
+      // console.log('\tnodes:', JSON.stringify(nodes));
+      // console.log('\tedges:', JSON.stringify(edges));
+      _.forEach(nodes, (n) => {
+        graph.setNode(n.id, Object.assign({}, n, SIZE.MAX));
+      });
+
+      _.forEach(edges, (e) => {
+        console.log('add edge :', JSON.stringify(e, '', 2));
+        graph.setEdge({ v: e.v, w: e.w, name: e.name }, { id: e.id, minlen: e.minlen, oper: e.oper, time: e.time, virtual: e.virtual })
+      });
+    }
   });
+
   dagre.layout(graph);
 }
-const transfer = (graph) => {
 
-  let vertexes = graph.nodes().map(n => { return graph.node(n) });
+
+
+
+const transfer = (graph) => {
+  let vertexes = graph.nodes().map(n => { console.log('--> n', n, JSON.stringify(graph.node(n))); return graph.node(n) });
   let edges = graph.edges().map(e => {
+    console.log('---> e:', e);
+    console.log('---> e.v', e.v);
+    console.log('---> e.w', e.w);
     const {x: srcX, y: srcY} = graph.node(e.v);
     const {x: destX, y: destY} = graph.node(e.w);
-    const {id, oper, time, points} = graph.edge(e);
+    const {id, oper, time, points, virtual} = graph.edge(e);
     return {
-      id, oper, time, points,
+      id, oper, time, points, virtual,
       src: { id: e.v, x: srcX, y: srcY },
       dest: { id: e.w, x: destX, y: destY }
     }
@@ -53,11 +91,12 @@ const transfer = (graph) => {
   return { vertexes, edges };
 }
 
-export const transferDataToGraphEdgeAndVertex = (chains) => {
+export const transferDataToGraphEdgeAndVertex = (chains, hiddenNodes) => {
+  // console.log('transferDataToGraphEdgeAndVertex states :',hiddenNodes)
   let graph = new dagre.graphlib.Graph({ multigraph: true, directed: true, compound: false });
   graph.setGraph(GRAPH_SETTING);
   graph.setDefaultEdgeLabel(() => { return {}; });
-  setEdgeAndNode(graph, chains);
+  setEdgeAndNode(graph, chains, hiddenNodes);
   return transfer(graph);
 }
 

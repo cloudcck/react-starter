@@ -1,25 +1,47 @@
-import React, { Component } from 'react';
+import React, { PureComponent, Component } from 'react';
 import { connect } from 'react-redux';
 import dagre from 'dagre';
 import _ from 'lodash'
-import JSONTree from 'react-json-tree'
-
+import JSONTree from 'react-json-tree';
+import { Map, List, fromJS } from 'immutable';
 import { fetchRemoteData, getMore, getParent, getChild } from './redux/action';
 import moment from 'moment';
 import Edge from './components/Edge';
 import Vertex from './components/Vertex';
 import { transferDataToGraphEdgeAndVertex } from './ProcessChainLib';
 
-class ProcessChain extends Component {
+class ProcessChain extends PureComponent {
   constructor(props) {
     super(props);
+    this.toggleHidden = this.toggleHidden.bind(this);
+    this.toggleSize = this.toggleSize.bind(this);
   }
   componentWillMount() {
     let {taskId, agentId} = this.props.routeParams;
     this.props.fetchRemoteData(taskId, agentId);
+    this.state = { hiddenNodes: [], smallNodes: [] };
+    console.log('componentWillMount  ', JSON.stringify(this.state))
   }
+  shouldComponentUpdate(nextProps, nextState) {
+    return !_.isEqual(this.props, nextProps) || !_.isEqual(this.state, nextState)
+  }
+
+  toggleHidden(id) {
+    console.log('ProcessChainPage toggleHidden ',id);
+    const newState = Object.assign({}, this.state, { hiddenNodes: _.uniq([...this.state.hiddenNodes, id]) });
+    this.setState(newState);
+    console.log('after toggle Hidden ,', JSON.stringify(this.state));
+  }
+  toggleSize(id) {
+    console.log('toggle size node ', id);
+  }
+  showNodeDetail(id) {
+    console.log(`show node detail of ${id}`);
+  }
+
   render() {
-    const {edges, vertexes} = transferDataToGraphEdgeAndVertex(this.props.chains);
+    const {hiddenNodes} = this.state;
+    const {edges, vertexes} = transferDataToGraphEdgeAndVertex(this.props.chains, hiddenNodes);
     const getParentFn = this.props.getParent;
     const getChildFn = this.props.getChild;
     return (
@@ -34,7 +56,13 @@ class ProcessChain extends Component {
             </defs>
             <g>
               {edges.map(e => <Edge key={e.id} data={e} />)}
-              {vertexes.map(n => <Vertex key={n.id} data={n} getParent={getParentFn} getChild={getChildFn} />)}
+              {vertexes.map(n => <Vertex key={n.id} data={n}
+                getParent={getParentFn}
+                getChild={getChildFn}
+                toggleHidden={this.toggleHidden}
+                toggleSize={this.toggleSize}
+                showNodeDetail={this.showNodeDetail}
+                />)}
             </g>
           </svg>
         }
