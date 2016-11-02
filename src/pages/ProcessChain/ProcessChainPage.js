@@ -29,10 +29,10 @@ class ProcessChain extends PureComponent {
 
   toggleHidden(id) {
     const newState = Object.assign({}, this.state, { hiddenNodes: _.uniq([...this.state.hiddenNodes, id]) });
-    this.setState(newState,()=>{console.log('after toggle Hidden ,', JSON.stringify(this.state))});
+    this.setState(newState, () => { console.log('after toggle Hidden ,', JSON.stringify(this.state)) });
   }
   reAddVertex(id) {
-    const newState = Object.assign({}, this.state, { hiddenNodes: this.state.hiddenNodes.filter(n=>n !== id) });
+    const newState = Object.assign({}, this.state, { hiddenNodes: this.state.hiddenNodes.filter(n => n !== id) });
     this.setState(newState);
   }
   toggleSize(id) {
@@ -44,7 +44,7 @@ class ProcessChain extends PureComponent {
 
   render() {
     const {hiddenNodes} = this.state;
-    const {edges, vertexes} = transferDataToGraphEdgeAndVertex(this.props.chains,hiddenNodes);
+    const {edges, vertexes} = transferDataToGraphEdgeAndVertex(this.props.chains, hiddenNodes);
     const getParentFn = this.props.getParent;
     const getChildFn = this.props.getChild;
     return (
