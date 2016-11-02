@@ -12,14 +12,14 @@ export const normailze = (processes, fmt = 'YYYY-MM-DD') => {
 const mapFn = (chain, fmt) => {
   const {pid, oid, op, opTime: t} = chain;
   const ts = formatDate(t, fmt);
-  const x = (id, label, src, dest, t, ts) => {
-    return { id, label, src, dest, t0: t, t1: t, ts0: ts, ts1: ts }
+  const x = (id, label, src, dest, t) => {
+    return { id, label, src, dest, t0: t, t1: t }
   };
   const src = { [pid]: [{ op, t }] };
   const dest = { [oid]: [{ op, t }] };
   return {
-    [pid]: x(pid, pid, {}, dest, t, ts),
-    [oid]: x(oid, oid, src, {}, t, ts)
+    [pid]: x(pid, pid, {}, dest, t),
+    [oid]: x(oid, oid, src, {}, t)
   }
 }
 
