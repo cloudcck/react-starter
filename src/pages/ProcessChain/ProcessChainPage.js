@@ -28,7 +28,7 @@ class ProcessChain extends PureComponent {
   // }
 
   toggleHidden(id) {
-    const newState = Object.assign({}, this.state, { hiddenNodes: _.uniq([...this.state.hiddenNodes, id]) });
+    const newState = Object.assign({}, this.state, { hiddenNodes: _.uniq([...this.state.hiddenNodes, '' + id]) });
     this.setState(newState, () => { console.log('after toggle Hidden ,', JSON.stringify(this.state)) });
   }
   reAddVertex(id) {
@@ -49,7 +49,7 @@ class ProcessChain extends PureComponent {
     const getChildFn = this.props.getChild;
     return (
       <div>
-        <button onClick={() => { } }>Get More</button>
+        <button onClick={() => { this.props.getMore() } }>Get More</button>
         {
           <svg width="100%" height="600px">
             <defs>
@@ -64,6 +64,7 @@ class ProcessChain extends PureComponent {
                 toggleHidden={this.toggleHidden}
                 toggleSize={this.toggleSize}
                 showNodeDetail={this.showNodeDetail}
+                metaData={this.props.chains.metaData}
                 />)}
             </g>
           </svg>
@@ -84,17 +85,17 @@ const mapStateToProps = (state, ownProps = {}) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchRemoteData: (tasiId, agentId) => {
-      dispatch(fetchRemoteData(tasiId, agentId));
+    fetchRemoteData: (taskId, agentId) => {
+      dispatch(fetchRemoteData(taskId, agentId));
     },
-    getParent: (tasiId, agentId, objectId) => {
-      dispatch(getParent(tasiId, agentId, objectId));
+    getParent: (taskId, agentId, objectId) => {
+      dispatch(getParent(taskId, agentId, objectId));
     },
-    getChild: (tasiId, agentId, objectId) => {
-      dispatch(getChild(tasiId, agentId, objectId));
+    getChild: (taskId, agentId, objectId) => {
+      dispatch(getChild(taskId, agentId, objectId));
     },
-    getMore: () => {
-      dispatch(getMore(tasiId, agentId));
+    getMore: (taskId, agentId) => {
+      dispatch(getMore(taskId, agentId));
     }
   };
 }

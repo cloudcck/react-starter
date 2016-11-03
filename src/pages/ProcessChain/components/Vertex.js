@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import VertexFn from './VertexFn';
-
+import { OBJECT_TYPE, META } from '../ProcessChainDef'
 class Vertex extends Component {
   constructor(props) {
     super(props);
@@ -40,9 +40,17 @@ class Vertex extends Component {
   }
 
   render() {
-    const fileColor = _.includes(['_D', 'K', 'L', 'W', 'X', 'Z'], this.props.data.id) ? 'red' : 'gray';
-    const {label, width: w, height: h, x, y, id} = this.props.data;
+    // console.log(OBJECT_TYPE, META);
+    const fileColor = _.get(this.props.data, 'detail.isMatched', false) ? 'red' : 'gray';
+    const {width: w, height: h, x, y, id, detail} = this.props.data;
     let [x0, x1, y0, y1] = [x - w / 2, x + w / 2, y - h / 2, y + h / 2];
+
+    // label =.metaValue;
+    let objectName = _.get(this.props.data, 'detail.objectName');
+    let {metaType, metaValue} = _.get(this.props.metaData, objectName, { metaType: 0, metaValue: '' });
+    let label = _.trunc(metaValue || id, 10);
+
+
 
     const radius = 10;
     const functions = [

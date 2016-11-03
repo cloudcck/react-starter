@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 import './Edge.css';
+
+import { OPERATION } from '../ProcessChainDef'
 class Edge extends Component {
   constructor(props) {
     super(props);
@@ -10,7 +12,7 @@ class Edge extends Component {
   }
   render() {
     const {id, oper, time, points, virtual, dest: {y: minY}} = this.props.data;
-    const operTextPath = this.createTextPath(id, -3, oper);
+    const operTextPath = this.createTextPath(id, -3, OPERATION[oper]);
     const timeTextPath = this.createTextPath(id, 10, moment.unix(time).format('YYYY/MM/DD|hh:mm'));
     const strokeDasharray = virtual ? '5,5' : '0';
     const curve = points

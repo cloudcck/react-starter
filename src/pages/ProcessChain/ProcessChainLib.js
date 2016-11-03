@@ -21,6 +21,7 @@ const countMinLength = (timeSlots, srcVertex, destVertex) => {
 
 
 const notHidden = (hiddenNodes, nodeId) => {
+  console.log(typeof nodeId, nodeId);
   return !hiddenNodes.includes(nodeId);
 }
 
@@ -34,9 +35,18 @@ const recursive = (vertexes, timeKeys, rootVertex, parentVertex, nodes, edges, i
       if (notHidden(hiddenNodes, wId)) {
         nodes.push(w);
         _.forEach(opers, operation => {
-          let {op: oper, t: time} = operation;
+          let {oper, timestamp: time} = operation;
           let edgeId = `${rootVertex.id}_${oper}_${time}_${wId}`;
-          edges.push({ v: rootVertex.id, w: wId, name: edgeId, id: edgeId, minlen: countMinLength(timeKeys, parentVertex, w), oper, time, virtual: isVirtual });
+          edges.push({
+            v: rootVertex.id,
+            w: wId,
+            name: edgeId,
+            id: edgeId,
+            minlen: countMinLength(timeKeys, parentVertex, w),
+            oper,
+            time,
+            virtual: isVirtual
+          });
         });
       } else {
         const {nodes: _n, edges: _e} = recursive(vertexes, timeKeys, rootVertex, w, nodes, edges, true, hiddenNodes);
@@ -60,26 +70,22 @@ const generateTimeKeys = (vertexes, hiddenNodes) => {
 const setEdgeAndNode = (graph, vertexes, hiddenNodes = []) => {
   const timeKeys = generateTimeKeys(vertexes, hiddenNodes);
   _.forEach(vertexes, (v, vId) => {
-
     if (notHidden(hiddenNodes, vId)) {
       graph.setNode(vId, Object.assign({}, v, SIZE.MAX));
       const {nodes, edges} = recursive(vertexes, timeKeys, v, v, [], [], false, hiddenNodes);
-
       _.forEach(nodes, (n) => { graph.setNode(n.id, Object.assign({}, n, SIZE.MAX)); });
       _.forEach(edges, (e) => { graph.setEdge({ v: e.v, w: e.w, name: e.name }, { id: e.id, minlen: e.minlen, oper: e.oper, time: e.time, virtual: e.virtual }) });
     }
   });
-
-
-
   dagre.layout(graph);
 }
 
 
 
 
-const transfer = (graph) => {
-  let vertexes = graph.nodes().map(n => { return graph.node(n) });
+const transfer = (graph, chains) => {
+  const {objects, metaData } = chains;
+  let vertexes = graph.nodes().map(n => { return Object.assign({}, graph.node(n), _.get(objects, n)) });
   let edges = graph.edges().map(e => {
     const {x: srcX, y: srcY} = graph.node(e.v);
     const {x: destX, y: destY} = graph.node(e.w);
@@ -93,12 +99,14 @@ const transfer = (graph) => {
   return { vertexes, edges };
 }
 
-export const transferDataToGraphEdgeAndVertex = (vertextes, hiddenNodes) => {
+export const transferDataToGraphEdgeAndVertex = (chains, hiddenNodes) => {
+  console.log('hidden nodes:', JSON.stringify(hiddenNodes));
+  let {objects: vertextes, metaData} = chains;
   let graph = new dagre.graphlib.Graph({ multigraph: true, directed: true, compound: false });
   graph.setGraph(GRAPH_SETTING);
   graph.setDefaultEdgeLabel(() => { return {}; });
   setEdgeAndNode(graph, vertextes, hiddenNodes);
-  return transfer(graph);
+  return transfer(graph, chains);
 }
 
 

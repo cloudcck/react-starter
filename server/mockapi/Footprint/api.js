@@ -24,7 +24,7 @@ const getProcessChain = (req, res) => {
     processChainCollection.insert(row);
     json.push(row);
   });
-  console.log('json =>',JSON.stringify(json));
+  // console.log('json =>', JSON.stringify(json));
   res.send({ Code: 0, Message: 'OK', Data: json });
 }
 
@@ -108,5 +108,10 @@ const getMore = (req, res) => {
   res.send(data);
 }
 
+const getNewProcessChain = (req, res) => {
+  const file = path.resolve(process.cwd(), 'server/mockapi/Footprint', 'ProcessChain.new.json');
+  const str = fs.readFileSync(file, 'utf8');
+  res.send(JSON.parse(str));
+}
 
-module.exports = { getChild, getMore, getParent, getProcessChain };
+module.exports = { getChild, getMore, getParent, getProcessChain, getNewProcessChain };
