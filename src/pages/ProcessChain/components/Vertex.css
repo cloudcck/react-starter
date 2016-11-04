@@ -1,8 +1,11 @@
+g.graph-vertex,g.graph-vertex-fn {
+  cursor: pointer
+}
 g.graph-vertex > rect{
   fill:none;
-  stroke-width: 2
+  stroke-width: 1
 }
 g.graph-vertex-fn > rect{
   fill:none;
-  stroke-width: 2
+  stroke-width: 1
 }

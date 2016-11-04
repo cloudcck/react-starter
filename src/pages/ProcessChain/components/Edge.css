@@ -1,4 +1,9 @@
 g.graph-edge > text{
   font-size: 0.7em;
-  fill:indianred;
+  fill:#c8c8c8;
+}
+
+
+g.graph-edge > path{
+  stroke: #ccc
 }

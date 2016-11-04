@@ -22,7 +22,7 @@ class Edge extends Component {
       <g className="graph-edge">
         <path id={id} d={curve}
           fill="transparent"
-          stroke="#000000"
+
           strokeWidth="1"
           strokeDasharray={strokeDasharray}
           markerStart="url(#path_start)"

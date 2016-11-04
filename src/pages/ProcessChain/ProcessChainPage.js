@@ -85,10 +85,9 @@ class ProcessChain extends PureComponent {
                         </g>
                     </svg>
                 }
-
-                <div>
+                <aside>
                     <VertexDetail data={this.state.detailObject} metaData={this.props.chains.metaData} />
-                </div>
+                </aside>
             </div >
         );
     }
