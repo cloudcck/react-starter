@@ -21,7 +21,6 @@ const countMinLength = (timeSlots, srcVertex, destVertex) => {
 
 
 const notHidden = (hiddenNodes, nodeId) => {
-  console.log(typeof nodeId, nodeId);
   return !hiddenNodes.includes(nodeId);
 }
 

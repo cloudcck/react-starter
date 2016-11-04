@@ -42,16 +42,9 @@ class Vertex extends Component {
   render() {
     // console.log(OBJECT_TYPE, META);
     const fileColor = _.get(this.props.data, 'detail.isMatched', false) ? 'red' : 'gray';
-    const {width: w, height: h, x, y, id, detail} = this.props.data;
+    const {width: w, height: h, x, y, id, detail, label} = this.props.data;
     let [x0, x1, y0, y1] = [x - w / 2, x + w / 2, y - h / 2, y + h / 2];
-
-    // label =.metaValue;
-    let objectName = _.get(this.props.data, 'detail.objectName');
-    let {metaType, metaValue} = _.get(this.props.metaData, objectName, { metaType: 0, metaValue: '' });
-    let label = _.trunc(metaValue || id, 10);
-
-
-
+    let displayLabel = _.trunc(label, 10);
     const radius = 10;
     const functions = [
       { label: 'p', color: 'red', bindFn: this.getParent },
@@ -64,7 +57,7 @@ class Vertex extends Component {
       <g className="graph-vetex">
         <g onClick={() => this.props.showNodeDetail(id)} onDoubleClick={(e) => this.doubleClickHandler(e)}>
           <rect x={x - w / 2} y={y - h / 2} width={w} height={h} rx={radius} ry={radius} fill={fileColor} />
-          <text className="vertex-title" textAnchor="middle" alignmentBaseline="central" x={x} y={y}>{label}</text>
+          <text className="vertex-title" textAnchor="middle" alignmentBaseline="central" x={x} y={y}>{displayLabel}</text>
         </g>
         {functions.map(f => <VertexFn key={f.label} setting={Object.assign({}, f, { x: x0 += 10, y: y0 - 10, w: 10, h: 10, vertexId: id })} />)}
       </g>
