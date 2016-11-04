@@ -1,0 +1,4 @@
+div.hidden-nodes > span.label {
+  margin-right: 5px;
+  cursor: pointer;
+}
