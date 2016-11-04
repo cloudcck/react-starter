@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import VertexFn from './VertexFn';
 import { OBJECT_TYPE, META } from '../ProcessChainDef'
+import VertexIcon from './VertexIcon';
+import './Vertex.css';
+
 class Vertex extends Component {
   constructor(props) {
     super(props);
@@ -41,25 +44,28 @@ class Vertex extends Component {
 
   render() {
     // console.log(OBJECT_TYPE, META);
-    const fileColor = _.get(this.props.data, 'detail.isMatched', false) ? 'red' : 'gray';
-    const {width: w, height: h, x, y, id, detail, label} = this.props.data;
+    const fillColor = _.get(this.props.data, 'detail.isMatched', false) ? 'red' : 'gray';
+    const {width: w, height: h, x, y, id, detail: {objectType: objType}, label} = this.props.data;
     let [x0, x1, y0, y1] = [x - w / 2, x + w / 2, y - h / 2, y + h / 2];
-    let displayLabel = _.trunc(label, 10);
+    let displayLabel = _.trunc(label, 12);
     const radius = 10;
     const functions = [
-      { label: 'p', color: 'red', bindFn: this.getParent },
-      { label: 'c', color: 'green', bindFn: this.getChild },
-      { label: 's', color: 'yellow', bindFn: this.toggleSize },
-      { label: 'h', color: 'gray', bindFn: this.hideVertex }
+      // { label: 'p', color: 'red', bindFn: this.getParent },
+      // { label: 'c', color: 'green', bindFn: this.getChild },
+      // { label: 's', color: 'yellow', bindFn: this.toggleSize },
+      { label: 'x', color: 'gray', bindFn: this.hideVertex }
     ];
 
     return (
-      <g className="graph-vetex">
-        <g onClick={() => this.props.showNodeDetail(id)} onDoubleClick={(e) => this.doubleClickHandler(e)}>
-          <rect x={x - w / 2} y={y - h / 2} width={w} height={h} rx={radius} ry={radius} fill={fileColor} />
-          <text className="vertex-title" textAnchor="middle" alignmentBaseline="central" x={x} y={y}>{displayLabel}</text>
+      <g >
+        <g className="graph-vertex" onClick={() => this.props.showNodeDetail(id)} onDoubleClick={(e) => this.doubleClickHandler(e)}>
+          <rect x={x - w / 2} y={y - h / 2} width={w} height={h} rx={radius} ry={radius} stroke={fillColor} />
+          <text className="vertex-title" textAnchor="start" alignmentBaseline="central" x={x - w / 2 + 30} y={y} fill={fillColor}>{displayLabel}</text>
+          <VertexIcon data={{ x: x - w / 2 + 15, y, r: 10, objType: objType, fillColor }} />
         </g>
-        {functions.map(f => <VertexFn key={f.label} setting={Object.assign({}, f, { x: x0 += 10, y: y0 - 10, w: 10, h: 10, vertexId: id })} />)}
+        {functions.map(f =>
+          <VertexFn key={f.label} setting={Object.assign({}, f, { x: x1, y: y0, w: 10, h: 10, vertexId: id })} />
+        )}
       </g>
     );
   }

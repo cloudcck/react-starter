@@ -1,0 +1,8 @@
+g.graph-vertex > rect{
+  fill:none;
+  stroke-width: 2
+}
+g.graph-vertex-fn > rect{
+  fill:none;
+  stroke-width: 2
+}
