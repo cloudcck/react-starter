@@ -27,13 +27,14 @@ class VertexDetail extends PureComponent {
               let l = _.get(this.props.metaData, r.objectName).metaValue;
               let op = OPERATION[r.operation];
               let t = OBJECT_TYPE[r.objectType];
+              let key = 0;
               return (
                 <div>
                   <div>
                     <div><span className="label label-info">{op}</span>{t}</div>
                     {r.metaHashId.map(id => {
                       let _metaType = this.props.metaData[id].metaType;
-                      return (<div key={id}><span className="label label-default">{META[_metaType]}</span>{this.props.metaData[id].metaValue}</div>)
+                      return (<div key={key++}><span className="label label-default">{META[_metaType]}</span>{this.props.metaData[id].metaValue}</div>)
                     }
                     )}
                   </div>

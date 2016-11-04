@@ -9,3 +9,12 @@ g.graph-vertex-fn > rect{
   fill:none;
   stroke-width: 1
 }
+g.graph-vertex.suspicious > rect{
+  fill: indianred
+}
+g.graph-vertex.suspicious > text{
+  fill: ghostwhite
+}
+/*g.graph-vertex.matched {
+  stroke:orange
+}*/

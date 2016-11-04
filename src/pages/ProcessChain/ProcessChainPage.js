@@ -9,6 +9,7 @@ import moment from 'moment';
 import Edge from './components/Edge';
 import Vertex from './components/Vertex';
 import VertexDetail from './components/VertexDetail';
+import HiddenVertexes from './components/HiddenVertexes';
 import { transferDataToGraphEdgeAndVertex } from './ProcessChainLib';
 import './ProcessChainPage.css'
 
@@ -19,12 +20,16 @@ class ProcessChain extends PureComponent {
         this.toggleSize = this.toggleSize.bind(this);
         this.reAddVertex = this.reAddVertex.bind(this);
         this.showNodeDetail = this.showNodeDetail.bind(this);
+        this.hideNoneSuspiciousNodes = this.hideNoneSuspiciousNodes.bind(this);
+        this.showAllNodes = this.showAllNodes.bind(this);
+        this.showParent = this.showParent.bind(this);
+        this.showChildren = this.showChildren.bind(this);
     }
     componentWillMount() {
         let {taskId, agentId} = this.props.routeParams;
         this.props.fetchRemoteData(taskId, agentId);
         this.state = { hiddenNodes: [], smallNodes: [] };
-        console.log('componentWillMount  ', JSON.stringify(this.state))
+        // console.log('componentWillMount  ', JSON.stringify(this.state))
     }
     // shouldComponentUpdate(nextProps, nextState) {
     //   return !_.isEqual(this.props, nextProps) || !_.isEqual(this.state, nextState)
@@ -32,28 +37,46 @@ class ProcessChain extends PureComponent {
 
     toggleHidden(id) {
         const newState = Object.assign({}, this.state, { hiddenNodes: _.uniq([...this.state.hiddenNodes, '' + id]) });
-        this.setState(newState, () => { console.log('after toggle Hidden ,', JSON.stringify(this.state)) });
+        this.setState(newState);
     }
     reAddVertex(id) {
         const newState = Object.assign({}, this.state, { hiddenNodes: this.state.hiddenNodes.filter(n => n !== id) });
         this.setState(newState);
     }
     toggleSize(id) {
-        console.log('toggle size node ', id);
+        // console.log('toggle size node ', id);
     }
     showNodeDetail(id) {
-        console.log(`show node detail of ${id}`);
-        console.log('this.props', this.props);
+        // console.log(`show node detail of ${id}`);
+        // console.log('this.props', this.props);
         const detailObject = _.get(this.props.chains, `objects.${id}`);
-        console.log('detailObject:', detailObject);
+        // console.log('detailObject:', detailObject);
         this.setState(Object.assign({}, this.state, { detailObject: detailObject }));
     }
-
-    shouldComponentUpdate(nextProps, nextState) {
-        console.log('shouldComponentUpdate nextState:', nextState);
-        return true;
+    hideNoneSuspiciousNodes() {
+        const hiddenNodes = _.values(this.props.chains.objects).filter(o => !o.isSuspicious).map(o => o.id);
+        // console.log('hiddenNodes :', JSON.stringify(hiddenNodes));
+        const newState = Object.assign({}, this.state, { hiddenNodes: hiddenNodes });
+        this.setState(newState);
     }
-
+    showAllNodes() {
+        const newState = Object.assign({}, this.state, { hiddenNodes: [] });
+        this.setState(newState);
+    }
+    showParent(id) {
+        const ids = _.keys(this.props.chains.objects[id].src);
+        console.log(this.state.hiddenNodes, ids)
+        const hiddenNodes = this.state.hiddenNodes.filter(n => !_.includes(ids, n))
+        const newState = Object.assign({}, this.state, { hiddenNodes: hiddenNodes });
+        this.setState(newState);
+    }
+    showChildren(id) {
+        const ids = _.keys(this.props.chains.objects[id].dest);
+        console.log(this.state.hiddenNodes, ids)
+        const hiddenNodes = this.state.hiddenNodes.filter(n => !_.includes(ids, n))
+        const newState = Object.assign({}, this.state, { hiddenNodes: hiddenNodes });
+        this.setState(newState);
+    }
     render() {
         const {hiddenNodes} = this.state;
         const {edges, vertexes} = transferDataToGraphEdgeAndVertex(this.props.chains, hiddenNodes);
@@ -61,11 +84,11 @@ class ProcessChain extends PureComponent {
         const getChildFn = this.props.getChild;
         return (
             <div>
-
                 <button onClick={() => { this.props.getMore() } }>Get More</button>
-                <div className="hidden-nodes">
-                    {hiddenNodes.map(n => <span className="label label-success" key={n} onClick={() => { this.reAddVertex(n) } }>{this.props.chains.objects[n].label}</span>)}
-                </div>
+                <button onClick={() => { this.hideNoneSuspiciousNodes() } }>hideNoneSuspiciousNodes</button>
+                <button onClick={() => { this.showAllNodes() } }>showAllNodes</button>
+                <HiddenVertexes hiddenNodes={hiddenNodes} referenceObject={this.props.chains.objects} reAddVertex={this.reAddVertex} />
+
                 {
                     <svg width="100%" height="600px">
                         <defs>
@@ -75,8 +98,8 @@ class ProcessChain extends PureComponent {
                         <g>
                             {edges.map(e => <Edge key={e.id} data={e} />)}
                             {vertexes.map(n => <Vertex key={n.id} data={n}
-                                getParent={getParentFn}
-                                getChild={getChildFn}
+                                showParent={this.showParent}
+                                showChildren={this.showChildren}
                                 toggleHidden={this.toggleHidden}
                                 toggleSize={this.toggleSize}
                                 showNodeDetail={this.showNodeDetail}
