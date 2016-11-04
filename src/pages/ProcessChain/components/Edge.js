@@ -12,8 +12,8 @@ class Edge extends Component {
   }
   render() {
     const {id, oper, time, points, virtual, dest: {y: minY}} = this.props.data;
-    const operTextPath = this.createTextPath(id, -3, OPERATION[oper]);
-    const timeTextPath = this.createTextPath(id, 10, moment.unix(time).format('YYYY/MM/DD|hh:mm'));
+    const operTextPath = this.createTextPath(id, -3, OPERATION[oper]).toLowerCase();
+    const timeTextPath = time ? this.createTextPath(id, 10, moment.unix(time).format('YYYY/MM/DD|hh:mm')) : '';
     const strokeDasharray = virtual ? '5,5' : '0';
     const curve = points
       .map(p => `${p.x} ${p.y}`)
@@ -28,6 +28,7 @@ class Edge extends Component {
           markerStart="url(#path_start)"
           markerEnd="url(#path_end)"></path>
         <text textAnchor="middle" dangerouslySetInnerHTML={{ __html: operTextPath }} />
+
         <text textAnchor="middle" dangerouslySetInnerHTML={{ __html: timeTextPath }} />
       </g>
     );
