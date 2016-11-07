@@ -19,16 +19,14 @@ class Edge extends Component {
       .map(p => `${p.x} ${p.y}`)
       .reduce((pre, curr, i) => i % 2 ? `${pre} Q ${curr}` : `${pre} ${curr}`, 'M');
     return (
-      <g className="graph-edge">
+      <g className="graph-edge" >
         <path id={id} d={curve}
           fill="transparent"
-
           strokeWidth="1"
           strokeDasharray={strokeDasharray}
           markerStart="url(#path_start)"
           markerEnd="url(#path_end)"></path>
         <text textAnchor="middle" dangerouslySetInnerHTML={{ __html: operTextPath }} />
-
         <text textAnchor="middle" dangerouslySetInnerHTML={{ __html: timeTextPath }} />
       </g>
     );

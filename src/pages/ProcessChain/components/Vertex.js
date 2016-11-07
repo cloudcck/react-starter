@@ -68,10 +68,16 @@ class Vertex extends Component {
         const clazz = `graph-vertex ${isSuspicious ? 'suspicious' : ''} ${isMatched ? 'matched' : ''}`;
         return (
             <g >
-                <g className={clazz} onClick={() => this.props.showNodeDetail(id)} onDoubleClick={(e) => this.doubleClickHandler(e)}>
+                <g id={id} className={clazz}
+                    onClick={() => this.props.showNodeDetail(id)}
+                    onDoubleClick={(e) => this.doubleClickHandler(e)}
+                    onMouseOver={() => { this.props.addHighlight(id) } }
+                    onMouseLeave={() => { this.props.removeHighlight(id) } }
+                    >
                     <rect x={x - w / 2} y={y - h / 2} width={w} height={h} rx={radius} ry={radius} stroke={fillColor} />
                     <text className="vertex-title" textAnchor="start" alignmentBaseline="central" x={x - w / 2 + 30} y={y} fill={fillColor}>{displayLabel}</text>
                     <VertexIcon data={{ x: x - w / 2 + 15, y, r: 10, objType: objType, fillColor }} />
+
                 </g>
                 {functions.map(f =>
                     <VertexFn key={f.label} setting={Object.assign({}, f, { w: 10, h: 10, vertexId: id })} />

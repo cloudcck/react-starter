@@ -34,6 +34,8 @@ class ProcessChain extends PureComponent {
         this.scaleIn = this.scaleIn.bind(this);
         this.scaleOut = this.scaleOut.bind(this);
         this.resetScale = this.resetScale.bind(this);
+        this.addHighlight = this.addHighlight.bind(this);
+        this.removeHighlight = this.removeHighlight.bind(this);
     }
     componentWillMount() {
         let {taskId, agentId} = this.props.routeParams;
@@ -83,14 +85,12 @@ class ProcessChain extends PureComponent {
     }
     showParent(id) {
         const ids = _.keys(this.props.chains.objects[id].src);
-        console.log(this.state.hiddenNodes, ids)
         const hiddenNodes = this.state.hiddenNodes.filter(n => !_.includes(ids, n))
         const newState = Object.assign({}, this.state, { hiddenNodes: hiddenNodes });
         this.setState(newState);
     }
     showChildren(id) {
         const ids = _.keys(this.props.chains.objects[id].dest);
-        console.log(this.state.hiddenNodes, ids)
         const hiddenNodes = this.state.hiddenNodes.filter(n => !_.includes(ids, n))
         const newState = Object.assign({}, this.state, { hiddenNodes: hiddenNodes });
         this.setState(newState);
@@ -98,6 +98,19 @@ class ProcessChain extends PureComponent {
     componentDidUpdate() {
         SVG.get('diagram').style('cursor', 'move').draggable();
     }
+
+    addHighlight(id) {
+        ['diagram', id, ...this.graph.neighbors(id), ...this.graph.nodeEdges(id).map(e => e.name)]
+            .forEach(v => { SVG.get(v).addClass('highlight'); })
+
+    }
+
+    removeHighlight(id) {
+        ['diagram', id, ...this.graph.neighbors(id), ...this.graph.nodeEdges(id).map(e => e.name)]
+            .forEach(v => { SVG.get(v).removeClass('highlight'); })
+    }
+
+
     scaleIn() {
         if (this.scaleRatio < MAX_SCALE) return;
         this.scaleRatio -= 0.1;
@@ -112,9 +125,13 @@ class ProcessChain extends PureComponent {
         this.scaleRatio += 0.1;
         SVG.get('#diagram').scale(this.scaleRatio);
     }
+
     render() {
         const {hiddenNodes} = this.state;
-        const {edges, vertexes} = transferDataToGraphEdgeAndVertex(this.props.chains, hiddenNodes);
+        const {graph, edges, vertexes} = transferDataToGraphEdgeAndVertex(this.props.chains, hiddenNodes);
+        this.graph = graph;
+        this.edges = edges;
+        this.vertexes = vertexes;
         const getParentFn = this.props.getParent;
         const getChildFn = this.props.getChild;
         return (
@@ -131,8 +148,9 @@ class ProcessChain extends PureComponent {
                             <marker id="path_end" markerWidth="12" markerHeight="12" refX="6" refY="6" viewBox="0 0 12 12" orient="auto"><path d="M-6 0L6 6L-6 12 " fill="gray"></path></marker>
                         </defs>
                         <g id="diagram">
-                            {edges.map(e => <Edge key={e.id} data={e} />)}
-                            {vertexes.map(n => <Vertex key={n.id} data={n}
+                            {this.edges.map(e => <Edge key={e.id} data={e} />)}
+                            {this.vertexes.map(n => <Vertex key={n.id}
+                                data={n}
                                 showParent={this.showParent}
                                 showChildren={this.showChildren}
                                 toggleHidden={this.toggleHidden}
@@ -140,6 +158,8 @@ class ProcessChain extends PureComponent {
                                 showNodeDetail={this.showNodeDetail}
                                 metaData={this.props.chains.metaData}
                                 hiddenNodes={hiddenNodes}
+                                addHighlight={this.addHighlight}
+                                removeHighlight={this.removeHighlight}
                                 />)}
                         </g>
                     </svg>

@@ -9,6 +9,15 @@ g.graph-vertex-fn > rect{
   fill:none;
   stroke-width: 1
 }
+
+g#diagram.highlight > g > g.graph-vertex:not(.highlight),
+g#diagram.highlight > g > g.graph-vertex:not(.highlight) + g {
+  opacity: 0.1
+}
+
+g.graph-vertex.highlight > rect{
+  fill: lightyellow
+}
 g.graph-vertex.matched > rect{
   fill: orange
 }

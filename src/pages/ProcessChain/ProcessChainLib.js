@@ -95,7 +95,7 @@ const transfer = (graph, chains) => {
       dest: { id: e.w, x: destX, y: destY }
     }
   });
-  return { vertexes, edges };
+  return { graph, vertexes, edges };
 }
 
 export const transferDataToGraphEdgeAndVertex = (chains, hiddenNodes) => {
