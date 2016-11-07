@@ -44,23 +44,23 @@ class Vertex extends Component {
 
   render() {
     // console.log(OBJECT_TYPE, META);
-    const fillColor = _.get(this.props.data, 'detail.isMatched', false) ? 'red' : 'gray';
-    const {width: w, height: h, x, y, id, detail: {objectType: objType}, label, isMatched, isSuspicious, dest, src} = this.props.data;
+    const {hiddenNodes, data: {width: w, height: h, x, y, id, detail: {objectType: objType}, label, isMatched, isSuspicious, dest, src} } = this.props;
+    const fillColor = isMatched || isSuspicious ? 'red' : 'gray';
+    // const = data;
+
     let [x0, x1, y0, y1] = [x - w / 2, x + w / 2, y - h / 2, y + h / 2];
     let displayLabel = _.trunc(label, 12);
-    const radius = 10;
-
+    const radius = 5;
     const objColor = isSuspicious ? 'yellow' : ''
     const functions = [
-      { label: 'x', x: x, y: y0 - 10, color: 'gray', bindFn: this.hideVertex }
+      { label: 'x', x: x1 - 12, y: y0, color: 'gray', bindFn: this.hideVertex }
     ];
-    console.log(dest, src);
 
-    if (!_.isEmpty(dest)) {
-      functions.push({ label: 'c', x: x1, y: y, color: 'green', bindFn: this.props.showChildren })
+    if (!_.isEmpty(dest) && isTargetIdsInHiddenNodes(hiddenNodes, _.keys(dest))) {
+      functions.push({ label: '+', x: x1, y: y, color: 'green', bindFn: this.props.showChildren })
     }
-    if (!_.isEmpty(src)) {
-      functions.push({ label: 'p', x: x0 - 10, y: y, color: 'red', bindFn: this.props.showParent })
+    if (!_.isEmpty(src) && isTargetIdsInHiddenNodes(hiddenNodes, _.keys(src))) {
+      functions.push({ label: '+', x: x0 - 10, y: y, color: 'red', bindFn: this.props.showParent })
     }
 
 
@@ -81,3 +81,17 @@ class Vertex extends Component {
   }
 }
 export default Vertex;
+
+const isTargetIdsInHiddenNodes = (hiddenNodes = [], ids = []) => {
+  let contains = false;
+  if (!ids.length || !hiddenNodes.length) {
+    return contains;
+  } else {
+    for (let id of ids) {
+      if (_.includes(hiddenNodes, id)) {
+        return true;
+      }
+    }
+  }
+  return contains;
+}

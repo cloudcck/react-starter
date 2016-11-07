@@ -30,7 +30,7 @@ class VertexIcon extends PureComponent {
     return (
       <g>
         <circle cx={x} cy={y} r={r} strokeWidth="2" stroke={fillColor} fill="none" />
-        <text className="vertex-title" textAnchor="middle" alignmentBaseline="central" x={x} y={y}>{objTypeMapping[objType]}</text>
+        <text className="vertex-title" textAnchor="middle" alignmentBaseline="central" x={x} y={y} fill={fillColor}>{objTypeMapping[objType]}</text>
       </g>
     );
   }

@@ -104,6 +104,7 @@ class ProcessChain extends PureComponent {
                                 toggleSize={this.toggleSize}
                                 showNodeDetail={this.showNodeDetail}
                                 metaData={this.props.chains.metaData}
+                                hiddenNodes={hiddenNodes}
                                 />)}
                         </g>
                     </svg>
