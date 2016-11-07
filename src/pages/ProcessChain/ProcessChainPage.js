@@ -4,6 +4,7 @@ import dagre from 'dagre';
 import _ from 'lodash'
 import JSONTree from 'react-json-tree';
 import { Map, List, fromJS } from 'immutable';
+import saveSvgAsPng from 'save-svg-as-png'
 import { fetchRemoteData, getMore, getParent, getChild } from './redux/action';
 import moment from 'moment';
 import Edge from './components/Edge';
@@ -11,6 +12,7 @@ import Vertex from './components/Vertex';
 import VertexDetail from './components/VertexDetail';
 import HiddenVertexes from './components/HiddenVertexes';
 import { transferDataToGraphEdgeAndVertex } from './ProcessChainLib';
+
 import './ProcessChainPage.css'
 
 class ProcessChain extends PureComponent {
@@ -24,16 +26,25 @@ class ProcessChain extends PureComponent {
         this.showAllNodes = this.showAllNodes.bind(this);
         this.showParent = this.showParent.bind(this);
         this.showChildren = this.showChildren.bind(this);
+        this.exportSvg = this.exportSvg.bind(this);
     }
     componentWillMount() {
         let {taskId, agentId} = this.props.routeParams;
         this.props.fetchRemoteData(taskId, agentId);
         this.state = { hiddenNodes: [], smallNodes: [] };
-        // console.log('componentWillMount  ', JSON.stringify(this.state))
     }
-    // shouldComponentUpdate(nextProps, nextState) {
-    //   return !_.isEqual(this.props, nextProps) || !_.isEqual(this.state, nextState)
-    // }
+    exportSvg() {
+        // const {x, y, height, width} = svg.bbox();
+        let svgGraph = document.getElementById('svg-graph');
+        // console.log('svg-graph,', svgGraph);
+        const {x, y, height, width} = svgGraph.getBBox();
+        console.log('saveSvgAsPng:', saveSvgAsPng);
+        saveSvgAsPng.saveSvgAsPng(svgGraph, 'test.png', {
+            backgroundColor: '#fff',
+            top: y - 50, left: x - 50, height: height + 100, width: width + 100,
+        });
+
+    }
 
     toggleHidden(id) {
         const newState = Object.assign({}, this.state, { hiddenNodes: _.uniq([...this.state.hiddenNodes, '' + id]) });
@@ -87,10 +98,11 @@ class ProcessChain extends PureComponent {
                 <button onClick={() => { this.props.getMore() } }>Get More</button>
                 <button onClick={() => { this.hideNoneSuspiciousNodes() } }>hideNoneSuspiciousNodes</button>
                 <button onClick={() => { this.showAllNodes() } }>showAllNodes</button>
+                <button onClick={() => { this.exportSvg() } }>export</button>
                 <HiddenVertexes hiddenNodes={hiddenNodes} referenceObject={this.props.chains.objects} reAddVertex={this.reAddVertex} />
 
                 {
-                    <svg width="100%" height="600px">
+                    <svg id="svg-graph" width="100%" height="600px">
                         <defs>
                             <marker id="path_start" markerWidth="4" markerHeight="4" refX="2" refY="2" viewBox="0 0 4 4" orient="auto"><circle r="1" cx="2" cy="2" fill="gray"></circle></marker>
                             <marker id="path_end" markerWidth="12" markerHeight="12" refX="6" refY="6" viewBox="0 0 12 12" orient="auto"><path d="M-6 0L6 6L-6 12 " fill="gray"></path></marker>
