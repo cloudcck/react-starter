@@ -16,6 +16,7 @@ import HiddenVertexes from './components/HiddenVertexes';
 import { transferDataToGraphEdgeAndVertex } from './ProcessChainLib';
 
 import './ProcessChainPage.css'
+const ZOOM_IN_LIMIT = 0.2, ZOOM_OUT_LIMIT = 2.0;
 
 class ProcessChain extends PureComponent {
     constructor(props) {
@@ -29,6 +30,10 @@ class ProcessChain extends PureComponent {
         this.showParent = this.showParent.bind(this);
         this.showChildren = this.showChildren.bind(this);
         this.exportSvg = this.exportSvg.bind(this);
+        this.zoom = 1.0;
+        this.onZoomIn = this.onZoomIn.bind(this);
+        this.onZoomOut = this.onZoomOut.bind(this);
+        this.resetZoom = this.resetZoom.bind(this);
     }
     componentWillMount() {
         let {taskId, agentId} = this.props.routeParams;
@@ -93,6 +98,20 @@ class ProcessChain extends PureComponent {
     componentDidUpdate() {
         SVG.get('diagram').style('cursor', 'move').draggable();
     }
+    onZoomIn() {
+        if (this.zoom < ZOOM_IN_LIMIT) return;
+        this.zoom -= 0.1;
+        SVG.get('#diagram').scale(this.zoom);
+    }
+    resetZoom() {
+        this.zoom = 1.0;
+        SVG.get('#diagram').scale(this.zoom);
+    }
+    onZoomOut() {
+        if (this.zoom > ZOOM_OUT_LIMIT) return;
+        this.zoom += 0.1;
+        SVG.get('#diagram').scale(this.zoom);
+    }
     render() {
         const {hiddenNodes} = this.state;
         const {edges, vertexes} = transferDataToGraphEdgeAndVertex(this.props.chains, hiddenNodes);
@@ -125,9 +144,15 @@ class ProcessChain extends PureComponent {
                         </g>
                     </svg>
                 }
+                <div className="vertical-buttons">
+                    <button onClick={this.onZoomOut}><i className="fa fa-plus"></i></button>
+                    <button onClick={this.resetZoom}><i className="fa fa-refresh"></i></button>
+                    <button onClick={this.onZoomIn}><i className="fa fa-minus"></i></button>
+                </div>
                 <aside>
                     <VertexDetail data={this.state.detailObject} metaData={this.props.chains.metaData} />
                 </aside>
+
             </div >
         );
     }
