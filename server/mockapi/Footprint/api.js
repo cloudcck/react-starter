@@ -109,7 +109,7 @@ const getMore = (req, res) => {
 }
 
 const getNewProcessChain = (req, res) => {
-    const file = path.resolve(process.cwd(), 'server/mockapi/Footprint', 'ProcessChain.new.json');
+    const file = path.resolve(process.cwd(), 'server/mockapi/Footprint', 'ProcessChain.new.2.json');
     const str = fs.readFileSync(file, 'utf8');
     let data = JSON.parse(str);
     data.Data.content[0].content.serverMeta = data.Data.content[0].content.serverMeta.map(d => Object.assign({}, d, { isSuspicious: _.random(100) > 80 ? 1 : 0 }));

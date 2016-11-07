@@ -65,7 +65,7 @@ class ProcessChain extends PureComponent {
         this.setState(Object.assign({}, this.state, { detailObject: detailObject }));
     }
     hideNoneSuspiciousNodes() {
-        const hiddenNodes = _.values(this.props.chains.objects).filter(o => !o.isSuspicious).map(o => o.id);
+        const hiddenNodes = _.values(this.props.chains.objects).filter(o => !o.isSuspicious && !o.isMatched).map(o => o.id);
         // console.log('hiddenNodes :', JSON.stringify(hiddenNodes));
         const newState = Object.assign({}, this.state, { hiddenNodes: hiddenNodes });
         this.setState(newState);

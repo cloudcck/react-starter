@@ -14,7 +14,14 @@ class HiddenVertexes extends PureComponent {
         {hiddenNodes.map(n => {
           const obj = referenceObject[n];
           const label = obj.label;
-          const clazz = `label ${obj.isSuspicious ? 'label-danger' : 'label-default'}`;
+          let clazz = 'label';
+          if (obj.isMatched) {
+            clazz += ' label-warning';
+          } else if (obj.isSuspicious) {
+            clazz += ' label-danger';
+          } else {
+            clazz += ' label-default';
+          }
           return (
             <span className={clazz} key={n} onClick={() => { this.props.reAddVertex(n) } }>{label}</span>)
         }
