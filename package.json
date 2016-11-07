@@ -56,6 +56,8 @@
     "redux-logger": "^2.6.1",
     "redux-thunk": "^2.1.0",
     "save-svg-as-png": "^1.0.3",
+    "svg.draggable.js": "^2.2.1",
+    "svg.js": "^2.3.6",
     "uuid": "^2.0.2"
   }
 }
