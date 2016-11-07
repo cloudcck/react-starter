@@ -16,7 +16,7 @@ import HiddenVertexes from './components/HiddenVertexes';
 import { transferDataToGraphEdgeAndVertex } from './ProcessChainLib';
 
 import './ProcessChainPage.css'
-const ZOOM_IN_LIMIT = 0.2, ZOOM_OUT_LIMIT = 2.0;
+const MAX_SCALE = 0.2, MIN_SCALE = 2.0;
 
 class ProcessChain extends PureComponent {
     constructor(props) {
@@ -30,10 +30,10 @@ class ProcessChain extends PureComponent {
         this.showParent = this.showParent.bind(this);
         this.showChildren = this.showChildren.bind(this);
         this.exportSvg = this.exportSvg.bind(this);
-        this.zoom = 1.0;
-        this.onZoomIn = this.onZoomIn.bind(this);
-        this.onZoomOut = this.onZoomOut.bind(this);
-        this.resetZoom = this.resetZoom.bind(this);
+        this.scaleRatio = 1.0;
+        this.scaleIn = this.scaleIn.bind(this);
+        this.scaleOut = this.scaleOut.bind(this);
+        this.resetScale = this.resetScale.bind(this);
     }
     componentWillMount() {
         let {taskId, agentId} = this.props.routeParams;
@@ -98,19 +98,19 @@ class ProcessChain extends PureComponent {
     componentDidUpdate() {
         SVG.get('diagram').style('cursor', 'move').draggable();
     }
-    onZoomIn() {
-        if (this.zoom < ZOOM_IN_LIMIT) return;
-        this.zoom -= 0.1;
-        SVG.get('#diagram').scale(this.zoom);
+    scaleIn() {
+        if (this.scaleRatio < MAX_SCALE) return;
+        this.scaleRatio -= 0.1;
+        SVG.get('#diagram').scale(this.scaleRatio);
     }
-    resetZoom() {
-        this.zoom = 1.0;
-        SVG.get('#diagram').scale(this.zoom);
+    resetScale() {
+        this.scaleRatio = 1.0;
+        SVG.get('#diagram').scale(this.scaleRatio);
     }
-    onZoomOut() {
-        if (this.zoom > ZOOM_OUT_LIMIT) return;
-        this.zoom += 0.1;
-        SVG.get('#diagram').scale(this.zoom);
+    scaleOut() {
+        if (this.scaleRatio > MIN_SCALE) return;
+        this.scaleRatio += 0.1;
+        SVG.get('#diagram').scale(this.scaleRatio);
     }
     render() {
         const {hiddenNodes} = this.state;
@@ -144,15 +144,14 @@ class ProcessChain extends PureComponent {
                         </g>
                     </svg>
                 }
-                <div className="vertical-buttons">
-                    <button onClick={this.onZoomOut}><i className="fa fa-plus"></i></button>
-                    <button onClick={this.resetZoom}><i className="fa fa-refresh"></i></button>
-                    <button onClick={this.onZoomIn}><i className="fa fa-minus"></i></button>
+                <div>
+                    <button onClick={this.scaleOut}><i className="fa fa-plus"></i></button>
+                    <button onClick={this.resetScale}><i className="fa fa-refresh"></i></button>
+                    <button onClick={this.scaleIn}><i className="fa fa-minus"></i></button>
                 </div>
                 <aside>
                     <VertexDetail data={this.state.detailObject} metaData={this.props.chains.metaData} />
                 </aside>
-
             </div >
         );
     }

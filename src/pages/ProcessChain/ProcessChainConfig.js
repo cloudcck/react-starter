@@ -9,7 +9,7 @@ export const GRAPH_SETTING = {
   marginy: 50
 };
 export const SIZE = {
-  MAX: { width: 120, height: 30 },
+  MAX: { width: 130, height: 30 },
   MIN: { width: 40, height: 30 },
 };
 
