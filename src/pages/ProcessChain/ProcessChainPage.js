@@ -141,35 +141,37 @@ class ProcessChain extends PureComponent {
                 <button onClick={() => { this.showAllNodes() } }>showAllNodes</button>
                 <button onClick={() => { this.exportSvg() } }>export</button>
                 <HiddenVertexes hiddenNodes={hiddenNodes} referenceObject={this.props.chains.objects} reAddVertex={this.reAddVertex} />
-                {
-                    <svg id="svg-graph" width="100%" height="600px">
-                        <defs>
-                            <marker id="path_start" markerWidth="4" markerHeight="4" refX="2" refY="2" viewBox="0 0 4 4" orient="auto"><circle r="1" cx="2" cy="2" fill="gray"></circle></marker>
-                            <marker id="path_end" markerWidth="12" markerHeight="12" refX="6" refY="6" viewBox="0 0 12 12" orient="auto"><path d="M-6 0L6 6L-6 12 " fill="gray"></path></marker>
-                        </defs>
-                        <g id="diagram">
-                            {this.edges.map(e => <Edge key={e.id} data={e} />)}
-                            {this.vertexes.map(n => <Vertex key={n.id}
-                                data={n}
-                                showParent={this.showParent}
-                                showChildren={this.showChildren}
-                                toggleHidden={this.toggleHidden}
-                                toggleSize={this.toggleSize}
-                                showNodeDetail={this.showNodeDetail}
-                                metaData={this.props.chains.metaData}
-                                hiddenNodes={hiddenNodes}
-                                addHighlight={this.addHighlight}
-                                removeHighlight={this.removeHighlight}
-                                />)}
-                        </g>
-                    </svg>
-                }
+                <div className="graph-content">
+                    {
+                        <svg id="svg-graph" width="100%" height="600px">
+                            <defs>
+                                <marker id="path_start" markerWidth="4" markerHeight="4" refX="2" refY="2" viewBox="0 0 4 4" orient="auto"><circle r="1" cx="2" cy="2" fill="gray"></circle></marker>
+                                <marker id="path_end" markerWidth="12" markerHeight="12" refX="6" refY="6" viewBox="0 0 12 12" orient="auto"><path d="M-6 0L6 6L-6 12 " fill="gray"></path></marker>
+                            </defs>
+                            <g id="diagram">
+                                {this.edges.map(e => <Edge key={e.id} data={e} />)}
+                                {this.vertexes.map(n => <Vertex key={n.id}
+                                    data={n}
+                                    showParent={this.showParent}
+                                    showChildren={this.showChildren}
+                                    toggleHidden={this.toggleHidden}
+                                    toggleSize={this.toggleSize}
+                                    showNodeDetail={this.showNodeDetail}
+                                    metaData={this.props.chains.metaData}
+                                    hiddenNodes={hiddenNodes}
+                                    addHighlight={this.addHighlight}
+                                    removeHighlight={this.removeHighlight}
+                                    />)}
+                            </g>
+                        </svg>
+                    }
+                </div>
                 <div>
                     <button onClick={this.scaleOut}><i className="fa fa-plus"></i></button>
                     <button onClick={this.resetScale}><i className="fa fa-refresh"></i></button>
                     <button onClick={this.scaleIn}><i className="fa fa-minus"></i></button>
                 </div>
-                <aside>
+                <aside className="vertex-detail-aside">
                     <VertexDetail data={this.state.detailObject} metaData={this.props.chains.metaData} />
                 </aside>
             </div >

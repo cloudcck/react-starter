@@ -27,3 +27,8 @@ g.graph-vertex.matched > text{
 /*g.graph-vertex.matched {
   stroke:orange
 }*/
+
+div.vertex-detail{
+  max-height: 300px;
+  overflow: scroll
+}

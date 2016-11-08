@@ -3,3 +3,12 @@ div.hidden-nodes > span.label {
   cursor: pointer;
   display:inline-block;
 }
+aside.vertex-detail-aside{
+  width: 300px;
+  position: fixed;
+  top:200px;
+  right:0px
+}
+div.graph-content{
+  border: 1px solid black;
+}
