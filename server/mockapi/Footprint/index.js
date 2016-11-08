@@ -8,7 +8,7 @@ module.exports = (function () {
   router.get('/:taskId/:endpointId/more', api.getMore);
   router.get('/:taskId/:endpointId/:objId/parent', api.getParent);
   router.get('/:taskId/:endpointId/:objId/child', api.getChild);
-  router.get('/ProcessChain_new', api.getNewProcessChain)
+  router.post('/ProcessChain_new', api.getNewProcessChain)
   return router;
 })();
 
